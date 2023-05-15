@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameReviews.API.DTOs.IntermediateDTOs;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
 
 namespace GameReviews.API.Controllers
 
@@ -202,9 +204,86 @@ namespace GameReviews.API.Controllers
 
             return _mapper.Map<List<GameDTO>>(games);
 
-
         }
 
+        [HttpGet("GetSteamGameInfo")]
+        public async Task<ActionResult<GameInfoSteamDTO>> getSteamGameInfo([FromQuery] string gameName)
+        {
+            var gameInfo = new GameInfoSteamDTO();
+            HttpClient _httpClient = new HttpClient();
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("http://api.steampowered.com/ISteamApps/GetAppList/v0002/");
 
+                response.EnsureSuccessStatusCode(); // Ensure the response is successful (status code 2xx)
+
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                JObject json = JObject.Parse(jsonResponse);
+                JToken appList = json["applist"];
+                JToken apps = appList["apps"];
+
+                foreach (JToken app in apps)
+                {
+                    string appName = app["name"].ToString();
+
+                    //contains or equal mai vad!!!
+                    if (appName.Equals(gameName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        string gameId = app["appid"].ToString();
+                        var gamePrice = await getsSteamGamePrice(gameId);
+                        if (gamePrice != null)
+                        {
+                            gameInfo.Price = gamePrice.ToString();
+                            gameInfo.GameId = gameId;
+                            return Ok(gameInfo);
+                        }
+                        else
+                        {
+                            gameInfo.GameId = "NoGame";
+                            gameInfo.Price = "NoPrice";
+                        }
+                    }
+                    else
+                    {
+                        gameInfo.GameId = "NoGame";
+                        gameInfo.Price = "NoPrice";
+                    }
+                }
+                return Ok(gameInfo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        private async Task<string> getsSteamGamePrice([FromQuery] string gameId)
+        {
+            HttpClient _httpClient = new HttpClient();
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync($"https://store.steampowered.com/api/appdetails?appids={gameId}");
+
+                response.EnsureSuccessStatusCode();
+
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(jsonResponse);
+                JToken appDetails = json[$"{gameId}"]["data"];
+
+                if (appDetails != null)
+                {
+                    JToken price = appDetails?["price_overview"]["final_formatted"];
+                    string gamePrice = price?.ToString() ?? "NoPrice";
+
+                    return gamePrice;
+                }
+                return "NoPrice";
+            }
+            catch (Exception ex)
+            {
+                return "NoPrice";
+            }
+        }
     }
 }

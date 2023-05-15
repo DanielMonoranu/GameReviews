@@ -7,6 +7,7 @@ import Loading from "../Utilities/Loading";
 import ReactQuill from "react-quill";
 import { platform } from "os";
 import TwitchLink from "../Utilities/TwitchLink";
+import SteamLink from "../Utilities/SteamLink";
 
 export default function GameFeatures() {
     const { id }: any = useParams();
@@ -88,6 +89,7 @@ export default function GameFeatures() {
                 >{platform.name}</Link>)}</div> : null}
 
             <TwitchLink gameName={game.name} />
+            <SteamLink gameName={game.name} />
         </div> : <Loading />
     );
 }
