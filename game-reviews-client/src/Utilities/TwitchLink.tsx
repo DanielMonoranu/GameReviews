@@ -2,10 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function TwitchLink(props: TwitchLinkProps) {
-
-
-
-
     const clientId = process.env.REACT_APP_TWITCH_CLIENT_ID;
     const oauthToken = process.env.REACT_APP_TWITCH_OAUTH_TOKEN;
     const [streamValues, setStreamValues] = useState<TwitchLinkInfo>();
@@ -21,7 +17,6 @@ export default function TwitchLink(props: TwitchLinkProps) {
             pictureUrl: "",
             noStream: false,
         };
-
 
         const headers = {
             'Client-ID': clientId,
