@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GameReviews.API.DTOs;
+using GameReviews.API.DTOs.IntermediateDTOs;
 using GameReviews.API.Entities;
 using GameReviews.API.Helpers;
 using Microsoft.AspNetCore.Mvc;

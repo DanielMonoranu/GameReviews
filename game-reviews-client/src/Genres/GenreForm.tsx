@@ -1,11 +1,7 @@
-import * as Yup from 'yup';
-import { Formik, Field, Form, ErrorMessage, FormikProvider, FormikHelpers } from "formik";
-import TextField from '../Forms/TextField';
+import { Form, Formik, FormikHelpers } from "formik";
 import { Link } from 'react-router-dom';
+import TextField from '../Forms/TextField';
 import { genreCreationDTO } from './genres.model';
-import DateField from '../Forms/DateField';
-import ImageField from '../Forms/ImageField';
-import QuillField from '../Forms/QuillField';
 
 export default function GenreForm(props: genreFormProps) {
     return (
@@ -21,7 +17,6 @@ export default function GenreForm(props: genreFormProps) {
                     <Link className="btn btn-secondary" to="/genres"  >Cancel</Link>
                 </Form>
             )}
-
         </Formik>
     )
 }

@@ -4,6 +4,7 @@ using GameReviews.API.DTOs;
 using GameReviews.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GameReviews.API.DTOs.IntermediateDTOs;
 
 namespace GameReviews.API.Controllers
 

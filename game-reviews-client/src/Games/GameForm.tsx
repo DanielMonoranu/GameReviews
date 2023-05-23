@@ -22,12 +22,10 @@ export default function GameForm(props: gameFormProps) {
             onSubmit={(values, actions) => {
                 props.onSubmit(values, actions);
             }}
-
             validationSchema={Yup.object({
                 name: Yup.string().required("This field is required").firstLetterUpercase(),
                 trailer: Yup.string().required("This field is required").url("Trailer must be a valid URL"),
             })
-
             }
         >
             {(formikProps) => (
