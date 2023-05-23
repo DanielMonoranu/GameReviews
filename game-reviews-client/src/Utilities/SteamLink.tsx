@@ -11,7 +11,6 @@ export default function SteamLink(props: SteamLinkProps) {
         noGame: false,
     }
     useEffect(() => {
-
         try {
             axios.get(`${urlGames}/GetSteamGameInfo`, { params: { "gameName": props.gameName } })
                 .then(response => {
@@ -36,7 +35,6 @@ export default function SteamLink(props: SteamLinkProps) {
             <div>
                 {steamGameInfo?.price}
             </div></div>}
-
     </>
     )
 }

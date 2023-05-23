@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameReviews.API.DTOs
+namespace GameReviews.API.DTOs.IntermediateDTOs
 {
     public class PaginationDTO
     {
@@ -15,7 +15,7 @@ namespace GameReviews.API.DTOs
         public int RecordsPerPage
         {
             get { return recordsPerPage; }
-            set { recordsPerPage = (value > maximumRecordsPerPage) ? maximumRecordsPerPage : value; }
+            set { recordsPerPage = value > maximumRecordsPerPage ? maximumRecordsPerPage : value; }
         }
 
     }

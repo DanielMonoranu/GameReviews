@@ -157,6 +157,33 @@ namespace GameReviews.API.Migrations
                     b.ToTable("Platforms");
                 });
 
+            modelBuilder.Entity("GameReviews.API.Entities.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ParentReviewId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReviewText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("ParentReviewId");
+
+                    b.ToTable("Review");
+                });
+
             modelBuilder.Entity("GameReviews.API.Entities.IntermediateEntities.GamesDevelopers", b =>
                 {
                     b.HasOne("GameReviews.API.Entities.Developer", "Developer")
@@ -214,6 +241,23 @@ namespace GameReviews.API.Migrations
                     b.Navigation("Platform");
                 });
 
+            modelBuilder.Entity("GameReviews.API.Entities.Review", b =>
+                {
+                    b.HasOne("GameReviews.API.Entities.Game", "Game")
+                        .WithMany("Reviews")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameReviews.API.Entities.Review", "ParentReview")
+                        .WithMany("ChildReviews")
+                        .HasForeignKey("ParentReviewId");
+
+                    b.Navigation("Game");
+
+                    b.Navigation("ParentReview");
+                });
+
             modelBuilder.Entity("GameReviews.API.Entities.Game", b =>
                 {
                     b.Navigation("GamesDevelopers");
@@ -221,6 +265,13 @@ namespace GameReviews.API.Migrations
                     b.Navigation("GamesGenres");
 
                     b.Navigation("GamesPlatforms");
+
+                    b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("GameReviews.API.Entities.Review", b =>
+                {
+                    b.Navigation("ChildReviews");
                 });
 #pragma warning restore 612, 618
         }

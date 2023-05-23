@@ -21,6 +21,19 @@ namespace GameReviews.API
              .HasKey(x => new { x.PlatformId, x.GameId });
             modelBuilder.Entity<GamesDevelopers>()
              .HasKey(x => new { x.DeveloperId, x.GameId });
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.ParentReview)
+                .WithMany(r => r.ChildReviews)
+                .HasForeignKey(r => r.ParentReviewId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Review>()
+                            .HasOne(r => r.Game)
+                            .WithMany(g => g.Reviews)
+                            .HasForeignKey(r => r.GameId);
+
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -31,6 +44,7 @@ namespace GameReviews.API
         public DbSet<GamesGenres> GamesGenres { get; set; }
         public DbSet<GamesDevelopers> GamesDevelopers { get; set; }
         public DbSet<GamesPlatforms> GamesPlatforms { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
 
     }
