@@ -14,6 +14,8 @@ import GenresIndex from "./Screens/GenresIndex";
 import LandingPage from "./Screens/LandingPage";
 import PlatformIndex from "./Screens/PlatformIndex";
 import RedirectToLandingPage from "./Utilities/RedirectToLandingPage";
+import Review from "./Reviews/Review";
+import ReviewIndex from "./Screens/ReviewIndex";
 
 const routes = [
     { path: "/", component: LandingPage, exact: true },
@@ -36,6 +38,8 @@ const routes = [
     { path: "/games/edit/:id(\\d+)", component: EditGame },
     { path: "/games/filter", component: FilterGames },
     { path: "/games/:id(\\d+)", component: GameFeatures },
+
+    { path: "/reviews/:id(\\d+)", component: ReviewIndex },
 
 
 

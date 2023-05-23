@@ -24,6 +24,7 @@ export default function GameFeatures() {
     const modules = { //for reactQuill
         toolbar: false
     }
+
     function createVideoFromURL(trailer: string): string {
         if (!trailer) { return '' }
 
@@ -90,6 +91,10 @@ export default function GameFeatures() {
 
             <TwitchLink gameName={game.name} />
             <SteamLink gameName={game.name} />
+
+            <div>
+                <Link className="btn btn-primary" to={`/reviews/${id}`}>See reviews</Link>
+            </div>
         </div> : <Loading />
     );
 }

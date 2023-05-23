@@ -1,4 +1,4 @@
-﻿using GameReviews.API.DTOs;
+﻿using GameReviews.API.DTOs.IntermediateDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

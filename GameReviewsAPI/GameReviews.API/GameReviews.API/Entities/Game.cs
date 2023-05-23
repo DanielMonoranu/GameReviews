@@ -20,5 +20,7 @@ namespace GameReviews.API.Entities
         public List<GamesDevelopers> GamesDevelopers { get; set; }
         public List<GamesPlatforms> GamesPlatforms { get; set; }
 
+        public List<Review> Reviews { get; set; }
+
     }
 }
