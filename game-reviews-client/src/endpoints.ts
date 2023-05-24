@@ -4,3 +4,4 @@ export const urlPlatforms = `${baseURL}/platforms`;
 export const urlDevelopers = `${baseURL}/developers`;
 export const urlGames = `${baseURL}/games`;
 export const urlReviews = `${baseURL}/reviews`;
+export const urlAccounts = `${baseURL}/accounts`;

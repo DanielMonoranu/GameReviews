@@ -16,31 +16,35 @@ import PlatformIndex from "./Screens/PlatformIndex";
 import RedirectToLandingPage from "./Utilities/RedirectToLandingPage";
 import Review from "./Reviews/Review";
 import ReviewIndex from "./Screens/ReviewIndex";
+import RegisterUser from "./Auth/RegisterUser";
+import Login from "./Auth/LoginUser";
+import LoginUser from "./Auth/LoginUser";
 
 const routes = [
     { path: "/", component: LandingPage, exact: true },
 
-    { path: "/genres", component: GenresIndex, exact: true },
-    { path: "/genres/create", component: CreateGenre },
-    { path: "/genres/edit/:id(\\d+)", component: EditGenre },
+    { path: "/genres", component: GenresIndex, exact: true, isAdmin: true },
+    { path: "/genres/create", component: CreateGenre, isAdmin: true },
+    { path: "/genres/edit/:id(\\d+)", component: EditGenre, isAdmin: true },
 
-    { path: "/developers", component: DevelopersIndex, exact: true },
-    { path: "/developers/create", component: CreateDeveloper },
-    { path: "/developers/edit/:id(\\d+)", component: EditDeveloper },
+    { path: "/developers", component: DevelopersIndex, exact: true, isAdmin: true },
+    { path: "/developers/create", component: CreateDeveloper, isAdmin: true },
+    { path: "/developers/edit/:id(\\d+)", component: EditDeveloper, isAdmin: true },
 
-    { path: "/platforms", component: PlatformIndex, exact: true },
-    { path: "/platforms/create", component: CreatePlatform },
-    { path: "/platforms/edit/:id(\\d+)", component: EditPlatform },
+    { path: "/platforms", component: PlatformIndex, exact: true, isAdmin: true },
+    { path: "/platforms/create", component: CreatePlatform, isAdmin: true },
+    { path: "/platforms/edit/:id(\\d+)", component: EditPlatform, isAdmin: true },
 
     { path: "/games", component: GameIndex, exact: true },
-
     { path: "/games/create", component: CreateGame },
-    { path: "/games/edit/:id(\\d+)", component: EditGame },
+    { path: "/games/edit/:id(\\d+)", component: EditGame, isAdmin: true },
     { path: "/games/filter", component: FilterGames },
     { path: "/games/:id(\\d+)", component: GameFeatures },
 
     { path: "/reviews/:id(\\d+)", component: ReviewIndex },
 
+    { path: "/register", component: RegisterUser },
+    { path: "/login", component: LoginUser },
 
 
     { path: "*", component: RedirectToLandingPage },

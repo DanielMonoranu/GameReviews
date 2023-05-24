@@ -6,6 +6,7 @@ import SingleGame from "../Games/SingleGame"
 import axios, { AxiosResponse } from "axios";
 import { urlGames } from "../endpoints";
 import RefreshContext from "../Utilities/RefreshContext";
+import Authorized from "../Auth/Authorized";
 
 export default function LandingPage() {
     const [games, setGames] = useState<landingPageDTO>({});
@@ -20,6 +21,13 @@ export default function LandingPage() {
         })
     }
     return (<RefreshContext.Provider value={() => loadData()}>
+
+        <Authorized authorized={<>You are authorized</>}
+            notAuthorized={<>You are not authorized</>}
+            role='admin'  //aici pun ce rol am nevoie
+        />
+
+
         <div>
             Released:
         </div>
