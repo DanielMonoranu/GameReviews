@@ -12,5 +12,7 @@
         public List<GenreDTO> Genres { get; set; }
         public List<DeveloperDTO> Developers { get; set; }
         public List<PlatformDTO> Platforms { get; set; }
+        public double AverageScore { get; set; }
+        public int UserScore { get; set; }
     }
 }

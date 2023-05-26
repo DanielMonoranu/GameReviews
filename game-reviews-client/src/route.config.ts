@@ -19,6 +19,7 @@ import ReviewIndex from "./Screens/ReviewIndex";
 import RegisterUser from "./Auth/RegisterUser";
 import Login from "./Auth/LoginUser";
 import LoginUser from "./Auth/LoginUser";
+import UsersIndex from "./Screens/UsersIndex";
 
 const routes = [
     { path: "/", component: LandingPage, exact: true },
@@ -45,6 +46,8 @@ const routes = [
 
     { path: "/register", component: RegisterUser },
     { path: "/login", component: LoginUser },
+    { path: "/users", component: UsersIndex, isAdmin: true },
+
 
 
     { path: "*", component: RedirectToLandingPage },

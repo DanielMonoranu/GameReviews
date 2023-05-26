@@ -9,22 +9,22 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import { claim } from './Auth/auth.models';
 import AuthenticationContext from './Auth/AuthenticationContext';
-import { getClaims } from './Auth/HandleJWT';
+import { getClaims } from './Auth/JWTHandler';
+import configureInterceptor from './Utilities/HttpInterceptors';
 
 configureValidations();
+configureInterceptor();
 
 function App() {
 
   const [claims, setClaims] = useState<claim[]>([
     //de aici pun claimurile
     // { name: "email", value: "email@email.com" },  ////!!!!!!!!!!!!!!!!
-    // { name: "role", value: "admin" },  ////!!!!!!!!!!!!!!!!
+    //{ name: "role", value: "admin" },  ////!!!!!!!!!!!!!!!!
   ]);
 
   useEffect(() => {
     setClaims(getClaims());
-
-
   }, [])
 
   const isAdmin = () => {

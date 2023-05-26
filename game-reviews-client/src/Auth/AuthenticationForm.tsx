@@ -1,8 +1,9 @@
 import { Form, Formik, FormikHelpers } from 'formik';
-import { userCredentials } from './auth.models';
+import { userCreationDTO, userCredentialsDTO } from './auth.models';
 import * as Yup from 'yup';
 import TextField from '../Forms/TextField';
 import { Link } from 'react-router-dom';
+import ImageField from '../Forms/ImageField';
 
 export default function AutthenticationForm(props: authenticationFormProps) {
     return (
@@ -17,7 +18,7 @@ export default function AutthenticationForm(props: authenticationFormProps) {
                 <Form>
                     <TextField field={'email'} labelName={'Email'} />
                     <TextField field={'password'} labelName={'Password'} type='password' />
-
+                    {props.isRegister && <ImageField field={'profilePicture'} displayName={'Profile Picture'} />}
                     <button type="submit" className="btn btn-primary">Submit</button>
                     {/* add disabled to button! */}
                     <Link className='btn btn-secondary' to='/'>Cancel</Link>
@@ -29,6 +30,7 @@ export default function AutthenticationForm(props: authenticationFormProps) {
 }
 
 interface authenticationFormProps {
-    model: userCredentials;
-    onSubmit(values: userCredentials, actions: FormikHelpers<userCredentials>): void;
+    model: userCreationDTO | userCredentialsDTO;
+    onSubmit(values: userCreationDTO | userCredentialsDTO, actions: FormikHelpers<userCreationDTO | userCredentialsDTO>): void;
+    isRegister?: boolean;
 }

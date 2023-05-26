@@ -1,3 +1,4 @@
+import { userCreationDTO } from "../Auth/auth.models";
 import { gameCreationDTO } from "../Games/games.model";
 
 
@@ -36,6 +37,14 @@ export function convertGameToFormData(game: gameCreationDTO) {
     formData.append('developerID', JSON.stringify(game.developerID));
     formData.append('platformsIDs', JSON.stringify(game.platformsIDs));
     return formData;
+}
 
-
+export function convertAuthToFormData(user: userCreationDTO) {
+    const formData = new FormData();
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+    if (user.profilePicture) {
+        formData.append('profilePicture', user.profilePicture);
+    }
+    return formData;
 }

@@ -3,12 +3,25 @@ export interface claim {
     value: string;
 }
 
-export interface userCredentials {
+export interface userCredentialsDTO {
     email: string;
     password: string;
+    profilePictureURL?: string;
+}
+export interface userCreationDTO {
+    email: string;
+    password: string;
+    profilePicture?: File;
 }
 
-export interface authenticationResponse {
+
+export interface authenticationResponseDTO {
     token: string;
     expirationDate: Date;
+}
+
+export interface userDTO {
+    id: string;
+    email: string;
+    profilePicture: string
 }

@@ -8,27 +8,35 @@ using GameReviews.API.DTOs.IntermediateDTOs;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Identity.Client;
 
 namespace GameReviews.API.Controllers
 
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
     public class GamesController : ControllerBase
     {
         private readonly ILogger<GamesController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IFileStorageService _fileStorageService;
+        private readonly UserManager<ApplicationUser> _userManager;
         private string container = "gameposters";
-        public GamesController(ILogger<GamesController> logger, ApplicationDbContext context, IMapper mapper, IFileStorageService fileStorageService)
+        public GamesController(ILogger<GamesController> logger, ApplicationDbContext context, IMapper mapper, IFileStorageService fileStorageService, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _context = context;
             _mapper = mapper;
             _fileStorageService = fileStorageService;
+            _userManager = userManager;
         }
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<ActionResult<GameDTO>> Get(int id)
         {
             var game = await _context.Games
@@ -37,7 +45,31 @@ namespace GameReviews.API.Controllers
                 .Include(x => x.GamesDevelopers).ThenInclude(x => x.Developer)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (game == null) { return NotFound(); }
+
+            var averageScore = 0.0;
+            var userScore = 0;
+
+            if (await _context.Ratings.AnyAsync(x => x.GameId == id))
+            {
+                averageScore = await _context.Ratings.Where(x => x.GameId == id)
+                    .AverageAsync(x => x.Score);
+                if (HttpContext.User.Identity.IsAuthenticated)
+                {
+                    var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
+                    var user = await _userManager.FindByNameAsync(email);
+                    var userId = user.Id;
+
+                    var ratingTable = await _context.Ratings.FirstOrDefaultAsync(x => x.GameId == id && x.UserId == userId);
+                    if (ratingTable != null)
+                    {
+                        userScore = ratingTable.Score;
+                    }
+                }
+            }
+
             var gameDto = _mapper.Map<GameDTO>(game);
+            gameDto.AverageScore = averageScore;
+            gameDto.UserScore = userScore;
             return gameDto;
         }
 
@@ -56,6 +88,7 @@ namespace GameReviews.API.Controllers
         }
 
         [HttpGet("GetFrontPageGames")]
+        [AllowAnonymous]
         public async Task<ActionResult<FrontPageGamesDTO>> GetFrontPageGames()
         {
             var today = DateTime.Now;
@@ -161,10 +194,10 @@ namespace GameReviews.API.Controllers
             await _context.SaveChangesAsync();
             await _fileStorageService.DeleteFile(game.Poster, container);
             return Ok();
-
         }
 
         [HttpGet("filter")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<GameDTO>>> Filter([FromQuery] FilterGamesDTO filterGamesDTO)
         {
             var gamesQueryable = _context.Games.AsQueryable();
@@ -207,6 +240,7 @@ namespace GameReviews.API.Controllers
         }
 
         [HttpGet("GetSteamGameInfo")]
+        [AllowAnonymous]
         public async Task<ActionResult<GameInfoSteamDTO>> getSteamGameInfo([FromQuery] string gameName)
         {
             var gameInfo = new GameInfoSteamDTO();

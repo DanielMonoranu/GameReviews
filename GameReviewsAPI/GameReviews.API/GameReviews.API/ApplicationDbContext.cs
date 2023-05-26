@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameReviews.API
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
@@ -46,6 +46,7 @@ namespace GameReviews.API
         public DbSet<GamesDevelopers> GamesDevelopers { get; set; }
         public DbSet<GamesPlatforms> GamesPlatforms { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
 
     }

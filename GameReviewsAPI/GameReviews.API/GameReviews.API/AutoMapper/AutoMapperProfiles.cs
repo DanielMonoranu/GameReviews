@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GameReviews.API.DTOs;
+using GameReviews.API.DTOs.IntermediateDTOs;
 using GameReviews.API.Entities;
 using GameReviews.API.Entities.IntermediateEntities;
 using System;
@@ -37,6 +38,7 @@ namespace GameReviews.API.AutoMapper
             CreateMap<Review, ReviewDTO>();
             CreateMap<ReviewCreationDTO, Review>();
 
+            CreateMap<ApplicationUser, UserDTO>();
         }
 
         private List<GenreDTO> MapGameGenres(Game game, GameDTO gameDto)

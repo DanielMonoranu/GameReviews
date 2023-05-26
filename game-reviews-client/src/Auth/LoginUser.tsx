@@ -1,9 +1,9 @@
 import axios from "axios";
 import AutthenticationForm from "./AuthenticationForm";
-import { authenticationResponse, userCredentials } from "./auth.models";
+import { authenticationResponseDTO, userCredentialsDTO } from "./auth.models";
 import { urlAccounts } from "../endpoints";
 import notify from "../Utilities/ToastErrors";
-import { getClaims, saveToken } from "./HandleJWT";
+import { getClaims, saveToken } from "./JWTHandler";
 import AuthenticationContext from "./AuthenticationContext";
 import { useContext } from "react";
 import { useHistory } from "react-router-dom";
@@ -11,9 +11,9 @@ import { useHistory } from "react-router-dom";
 export default function LoginUser() {
     const { update } = useContext(AuthenticationContext);
     const history = useHistory();
-    const login = async (userCredentials: userCredentials) => {
+    const login = async (userCredentials: userCredentialsDTO) => {
         try {
-            await axios.post<authenticationResponse>(`${urlAccounts}/login`, userCredentials)
+            await axios.post<authenticationResponseDTO>(`${urlAccounts}/login`, userCredentials)
                 .then((response) => {
                     saveToken(response.data);
                     update(getClaims());

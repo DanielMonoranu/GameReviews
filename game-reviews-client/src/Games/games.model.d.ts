@@ -23,8 +23,8 @@ export interface gameDTO {
     genres: genreDTO[];
     developers: developerDTO[];
     platforms: platformDTO[];
-    // userVote: number;
-    //averageVote: number;
+    userScore: number;
+    averageScore: number;
     //critic vote
     //rating
 }
@@ -32,8 +32,6 @@ export interface landingPageDTO {
     releasedGames?: gameDTO[];
     upcomingGames?: gameDTO[];
 }
-
-
 export interface gameAttribuesDTO {
     genres: genreDTO[];
     platforms: platformDTO[];

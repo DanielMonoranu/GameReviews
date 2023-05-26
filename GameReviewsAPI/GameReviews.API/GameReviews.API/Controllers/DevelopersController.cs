@@ -5,12 +5,16 @@ using GameReviews.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameReviews.API.DTOs.IntermediateDTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace GameReviews.API.Controllers
 
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
+
     public class DevelopersController : ControllerBase
     {
         private readonly ILogger<DevelopersController> _logger;
@@ -35,13 +39,13 @@ namespace GameReviews.API.Controllers
             return Ok(developersdto);
         }
         [HttpGet("all")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<DeveloperDTO>>> Get()
         {
             var developers = await _context.Developers.OrderBy(u => u.Name).ToListAsync();
             var developersdto = _mapper.Map<List<DeveloperDTO>>(developers);
             return Ok(developersdto);
         }
-
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<DeveloperDTO>> Get(int id)

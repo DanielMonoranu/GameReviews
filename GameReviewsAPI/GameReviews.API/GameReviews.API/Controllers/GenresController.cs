@@ -5,12 +5,15 @@ using GameReviews.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameReviews.API.DTOs.IntermediateDTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace GameReviews.API.Controllers
 
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
     public class GenresController : ControllerBase
     {
         private readonly ILogger<GenresController> _logger;
@@ -29,16 +32,15 @@ namespace GameReviews.API.Controllers
 
             var queryable = _context.Genres.AsQueryable();
             await HttpContext.InsertParametersPaginationInHeader(queryable);
-
             var genres = await queryable.OrderBy(u => u.Name).Paginate(paginationDTO).ToListAsync();
             var genresdto = _mapper.Map<List<GenreDTO>>(genres);
             return Ok(genresdto);
         }
 
         [HttpGet("all")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<GenreDTO>>> Get()
         {
-
             var genres = await _context.Genres.OrderBy(u => u.Name).ToListAsync();
             var genresdto = _mapper.Map<List<GenreDTO>>(genres);
             return Ok(genresdto);

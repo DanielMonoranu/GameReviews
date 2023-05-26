@@ -19,7 +19,6 @@ namespace GameReviews.API.Entities
         public List<GamesGenres> GamesGenres { get; set; }
         public List<GamesDevelopers> GamesDevelopers { get; set; }
         public List<GamesPlatforms> GamesPlatforms { get; set; }
-
         public List<Review> Reviews { get; set; }
 
     }
