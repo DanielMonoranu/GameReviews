@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GameReviews.API.DTOs.IntermediateDTOs;
 
 namespace GameReviews.API.DTOs
 {
     public class RatingDTO
     {
-        [Range(1, 10)]
+        public int Id { get; set; }
         public int Score { get; set; }
         public int GameId { get; set; }
+        public UserDTO User { get; set; }
     }
 }

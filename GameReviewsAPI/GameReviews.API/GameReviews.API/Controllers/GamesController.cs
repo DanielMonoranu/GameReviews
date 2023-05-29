@@ -46,30 +46,56 @@ namespace GameReviews.API.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (game == null) { return NotFound(); }
 
-            var averageScore = 0.0;
+            var averageScoreCritics = 0.0;
+            var averageScoreUsers = 0.0;
             var userScore = 0;
+            var userType = "NotLoggedIn";
 
             if (await _context.Ratings.AnyAsync(x => x.GameId == id))
             {
-                averageScore = await _context.Ratings.Where(x => x.GameId == id)
+                try
+                {
+                    averageScoreCritics = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "Critic")
+                        .AverageAsync(x => x.Score);
+                }
+                catch { }
+                try
+                {
+                    averageScoreUsers = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "User")
                     .AverageAsync(x => x.Score);
-                if (HttpContext.User.Identity.IsAuthenticated)
+                }
+                catch { }
+
+                /*if (HttpContext.User.Identity.IsAuthenticated)
                 {
                     var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
                     var user = await _userManager.FindByNameAsync(email);
                     var userId = user.Id;
-
+                    userType = user.Type;
                     var ratingTable = await _context.Ratings.FirstOrDefaultAsync(x => x.GameId == id && x.UserId == userId);
                     if (ratingTable != null)
                     {
                         userScore = ratingTable.Score;
                     }
+                }*/
+            }
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
+                var user = await _userManager.FindByNameAsync(email);
+                var userId = user.Id;
+                userType = user.Type;
+                var ratingTable = await _context.Ratings.FirstOrDefaultAsync(x => x.GameId == id && x.UserId == userId);
+                if (ratingTable != null)
+                {
+                    userScore = ratingTable.Score;
                 }
             }
-
             var gameDto = _mapper.Map<GameDTO>(game);
-            gameDto.AverageScore = averageScore;
+            gameDto.AverageScoreCritics = averageScoreCritics;
+            gameDto.AverageScoreUsers = averageScoreUsers;
             gameDto.UserScore = userScore;
+            gameDto.UserType = userType;
             return gameDto;
         }
 

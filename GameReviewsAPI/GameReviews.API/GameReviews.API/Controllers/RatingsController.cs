@@ -26,7 +26,7 @@ namespace GameReviews.API.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Post([FromBody] RatingDTO ratingDTO)
+        public async Task<ActionResult> Post([FromBody] RatingCreationDTO ratingDTO)
         {
             var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
             var user = await _userManager.FindByNameAsync(email);
@@ -50,6 +50,19 @@ namespace GameReviews.API.Controllers
             }
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<RatingDTO>> Get(int id)
+        {
+            var ratings = await _context.Ratings.Include(r => r.User).Where(r => r.GameId == id).ToListAsync();
+            var ratingsDto = _mapper.Map<List<RatingDTO>>(ratings);
+            if (ratings != null)
+            {
+                return Ok(ratingsDto);
+            }
+            return BadRequest();
         }
     }
 }

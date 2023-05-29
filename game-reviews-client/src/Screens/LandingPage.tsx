@@ -22,10 +22,10 @@ export default function LandingPage() {
     }
     return (<RefreshContext.Provider value={() => loadData()}>
 
-        <Authorized authorized={<>You are authorized</>}
+        {/* <Authorized authorized={<>You are authorized</>}
             notAuthorized={<>You are not authorized</>}
             role='admin'  //aici pun ce rol am nevoie
-        />
+        /> */}
 
 
         <div>

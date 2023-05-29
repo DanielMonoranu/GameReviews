@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 
 export default function QuillReview(props: QuillReviewProps) {
@@ -11,12 +11,17 @@ export default function QuillReview(props: QuillReviewProps) {
         toolbar: false,
     }
 
+    useEffect(() => {
+        setText(props.text ? props.text : '')
+    }, [props.text])
+
+
     return (
         <div>
             <ReactQuill
-                value={props.text ? props.text : text}
+                value={text}
                 onChange={handleChange}
-                placeholder={"Write your comment"}
+                placeholder={props.placeholder}
                 readOnly={props.readonly}
                 modules={props.readonly ? modules : {}}
             />
@@ -24,7 +29,7 @@ export default function QuillReview(props: QuillReviewProps) {
                 onClick={() =>
                     props.onEnter && props.onEnter(text)
                 }    >Post</button>}
-            {props.parentReview === true && <button className="btn btn-danger m-1" onClick={() => { setText('') }} >x</button>}
+            {props.parentReview === true && <button className="btn btn-danger m-1" onClick={() => { setText('') }} >Clear</button>}
 
 
         </div >

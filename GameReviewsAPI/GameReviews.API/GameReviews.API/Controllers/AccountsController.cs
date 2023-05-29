@@ -39,14 +39,21 @@ namespace GameReviews.API.Controllers
         {
             var user = new ApplicationUser { UserName = userCreation.Email, Email = userCreation.Email };
             var result = await _userManager.CreateAsync(user, userCreation.Password);
+
             var userCredentials = new UserCredentialsDTO() { Email = userCreation.Email, Password = userCreation.Password };
             if (result.Succeeded)
             {
                 if (userCreation.ProfilePicture != null)
                 {
                     user.ProfilePicture = await _fileStorageService.SaveFile(container, userCreation.ProfilePicture);
-                    await _userManager.UpdateAsync(user);
                 }
+                else
+                {
+                    user.ProfilePicture = string.Empty;
+                }
+                await _userManager.UpdateAsync(user);
+                //  Claim claimToSend = new Claim("type", "user");
+                //await _userManager.AddClaimAsync(user, claimToSend);
                 return BuildToken(userCredentials, user.ProfilePicture);
             }
             else
@@ -71,6 +78,14 @@ namespace GameReviews.API.Controllers
                     {
                         claimToSend = new Claim("role", "admin");
                     }
+                    /*else if (claim.Value == "critic")
+                    {
+                        claimToSend = new Claim("type", "critic");
+                    }
+                    else
+                    {
+                        claimToSend = new Claim("type", "user");
+                    }*/
                 }
                 return BuildToken(userCredentials, user.ProfilePicture, claimToSend);
             }
@@ -78,7 +93,6 @@ namespace GameReviews.API.Controllers
             {
                 return BadRequest("Incorrect Login");
             }
-            return Ok();
 
         }
 
@@ -93,6 +107,7 @@ namespace GameReviews.API.Controllers
             var result = _mapper.Map<List<UserDTO>>(users);
             return Ok(result);
         }
+
         [HttpPost("makeAdmin")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public async Task<ActionResult> MakeAdmin([FromBody] string id)
@@ -101,6 +116,7 @@ namespace GameReviews.API.Controllers
             await _userManager.AddClaimAsync(user, new Claim("role", "admin"));
             return Ok();
         }
+
         [HttpPost("removeAdmin")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public async Task<ActionResult> RemoveAdmin([FromBody] string id)
@@ -110,6 +126,24 @@ namespace GameReviews.API.Controllers
             return Ok();
         }
 
+
+        [HttpPost("makeCritic")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
+        public async Task<ActionResult> MakeCritic([FromBody] string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.AddClaimAsync(user, new Claim("type", "critic"));
+            return Ok();
+        }
+
+        [HttpPost("removeCritic")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
+        public async Task<ActionResult> RemoveCritic([FromBody] string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            await _userManager.RemoveClaimAsync(user, new Claim("type", "critic"));
+            return Ok();
+        }
         private AuthenticationResponseDTO BuildToken(UserCredentialsDTO userCredentialsDTO, string? profilePicture, Claim? claim = null)
         {
 

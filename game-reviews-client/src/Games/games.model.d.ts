@@ -24,9 +24,8 @@ export interface gameDTO {
     developers: developerDTO[];
     platforms: platformDTO[];
     userScore: number;
-    averageScore: number;
-    //critic vote
-    //rating
+    averageScoreCritics: number;
+    averageScoreUsers: number;
 }
 export interface landingPageDTO {
     releasedGames?: gameDTO[];

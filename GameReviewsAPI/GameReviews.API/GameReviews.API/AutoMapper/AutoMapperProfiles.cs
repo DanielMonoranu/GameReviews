@@ -39,6 +39,7 @@ namespace GameReviews.API.AutoMapper
             CreateMap<ReviewCreationDTO, Review>();
 
             CreateMap<ApplicationUser, UserDTO>();
+            CreateMap<Rating, RatingDTO>();
         }
 
         private List<GenreDTO> MapGameGenres(Game game, GameDTO gameDto)

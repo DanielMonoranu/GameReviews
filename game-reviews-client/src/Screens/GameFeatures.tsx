@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { urlGames, urlRatings } from "../endpoints";
 import { Link, useParams } from "react-router-dom";
 import { gameDTO } from "../Games/games.model";
@@ -9,13 +9,17 @@ import { platform } from "os";
 import TwitchLink from "../Utilities/TwitchLink";
 import SteamLink from "../Utilities/SteamLink";
 import { Rating } from "@mui/material";
-import Ratings from "../Utilities/Ratings";
+
 import notify from "../Utilities/ToastErrors";
+import Ratings from "../Ratings/Ratings";
+import AuthenticationContext from "../Auth/AuthenticationContext";
 
 export default function GameFeatures() {
     const { id }: any = useParams();
     const [game, setGame] = useState<gameDTO>();
     //add functionality for ratin
+    const { claims } = useContext(AuthenticationContext);
+    const userIsLogged = claims?.length > 0;
 
     useEffect(() => {
         axios.get(`${urlGames}/${id}`)
@@ -24,7 +28,7 @@ export default function GameFeatures() {
                 setGame(response.data);
             })
 
-    }, [id, game?.userScore, game?.averageScore]) ///!
+    }, [id, game?.userScore]) ///!
 
     const modules = { //for reactQuill
         toolbar: false
@@ -47,19 +51,19 @@ export default function GameFeatures() {
         }
     }
 
-    const handleChange = (value: number) => {
-        // console.log(value);
-        axios.post(`${urlRatings}`, { gameId: id, score: value }).then((response) => {
-            //console.log(response);
-            notify({ type: "success", message: [`You rated it ${value}`] });
-        }).catch((error) => {
-            notify({
-                type: "error",
-                message: error.response.data
-            });
-        });
-        /////////////!!!!!!!!!!!trebuie modificari
-    }
+    // const handleChange = (value: number) => {
+    //     // console.log(value);
+    //     axios.post(`${urlRatings}`, { gameId: id, score: value }).then((response) => {
+    //         //console.log(response);
+    //         notify({ type: "success", message: [`You rated it ${value}`] });
+    //     }).catch((error) => {
+    //         notify({
+    //             type: "error",
+    //             message: error.response.data
+    //         });
+    //     });
+    //     /////////////!!!!!!!!!!!trebuie modificari
+    // }
 
 
     return (
@@ -68,9 +72,10 @@ export default function GameFeatures() {
             {game.genres?.map(genre => <Link style={{ marginRight: '5px' }} className="btn btn-primary btn-sm rounded-pill" key={genre.id}
                 to={`/games/filter?genreId=${genre.id}`}
             >{genre.name}</Link>)} | {game.releaseDate.toDateString()}
+            {userIsLogged ? <>| Your vote:< Ratings maxValue={10}
+                readonly={true} selectedValue={game.userScore} onChange={(value) => { }} /> </> : null}
 
-            | Your vote: <Ratings maxValue={10} selectedValue={game.userScore} onChange={(value) => { handleChange(value) }} />
-            | Average vote: {game.averageScore}
+            | Average vote Critics: {game.averageScoreCritics} | Average vote Users: {game.averageScoreUsers}
             {/* ({game.numberOfVotes} votes) */}
 
             <div style={{ display: 'flex', marginTop: '1rem' }}>

@@ -4,6 +4,7 @@ export interface ReviewDTO {
     parentReviewId?: number;
     gameId: number;
     childReviews?: Review[];
+    user: userDTO;
 }
 
 export interface ReviewCreationDTO {

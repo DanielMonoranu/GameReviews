@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import './Ratings.css'
 import AuthenticationContext from "../Auth/AuthenticationContext";
 import Swal from "sweetalert2";
+import { read } from "fs";
 
 export default function Ratings(props: ratingProps) {
     const [maxValueArray, setMaxValueArray] = useState<number[]>([])
@@ -11,7 +12,8 @@ export default function Ratings(props: ratingProps) {
 
     useEffect(() => {
         setMaxValueArray(Array(props.maxValue).fill(0));
-    }, [props.maxValue])
+        setSelectedValue(props.selectedValue)
+    }, [props.maxValue, props.selectedValue])
 
     const handleMouseOver = (score: number) => {
         setSelectedValue(score);
@@ -25,14 +27,15 @@ export default function Ratings(props: ratingProps) {
             return;
         }
         setSelectedValue(score);
-        props.onChange(score);
+        props.onChange!(score);
     }
 
     return (
         < >
+            {/* <h1>{selectedValue}</h1> */}
             {maxValueArray.map((value, index) =>
                 <FontAwesomeIcon icon="star" key={index}
-                    className={`fa-lg pointer ${selectedValue >= index + 1 ? 'checked' : ''
+                    className={`fa-lg pointer ${selectedValue! >= index + 1 ? 'checked' : ''
                         } ${index < 4
                             ? 'red'
                             : index >= 4 && index <= 6
@@ -41,8 +44,9 @@ export default function Ratings(props: ratingProps) {
                                     ? 'green'
                                     : ''
                         }`}
-                    onMouseOver={() => handleMouseOver(index + 1)}
-                    onClick={() => handleClick(index + 1)}
+                    onMouseOver={props.readonly !== true ? () => { handleMouseOver(index + 1) } : undefined
+                    }
+                    onClick={props.readonly !== true ? () => handleClick(index + 1) : undefined}
                 />
             )}
             <span>{selectedValue}</span>
@@ -51,6 +55,7 @@ export default function Ratings(props: ratingProps) {
 }
 interface ratingProps {
     maxValue: number;
-    selectedValue: number;
-    onChange: (value: number) => void;
+    selectedValue?: number;
+    onChange?: (value: number) => void;
+    readonly?: boolean;
 }

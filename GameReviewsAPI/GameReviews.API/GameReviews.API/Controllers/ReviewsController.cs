@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using GameReviews.API.DTOs;
 using GameReviews.API.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +14,12 @@ namespace GameReviews.API.Controllers
     [ApiController]
     public class ReviewsController : ControllerBase
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public ReviewsController(ApplicationDbContext context, IMapper mapper)
+        public ReviewsController(ApplicationDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
             _mapper = mapper;
         }
@@ -32,9 +37,14 @@ namespace GameReviews.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Post([FromBody] ReviewCreationDTO reviewCreationDTO)
         {
+
+            var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
+            var user = await _userManager.FindByNameAsync(email);
             var review = _mapper.Map<Review>(reviewCreationDTO);
+            review.UserId = user.Id;
             _context.Add(review);
             await _context.SaveChangesAsync();
             return Ok(review);
@@ -69,6 +79,7 @@ namespace GameReviews.API.Controllers
         List<ReviewDTO> GetParentReviews(int? parentReviewId, int id)
         {
             var reviews = _context.Reviews
+                .Include(r => r.User)
                 .Where(r => r.ParentReviewId == parentReviewId && r.GameId == id)
                 .ToList();
             var reviewsDto = _mapper.Map<List<ReviewDTO>>(reviews);
@@ -77,12 +88,7 @@ namespace GameReviews.API.Controllers
             {
                 reviewDTo.ChildReviews = GetParentReviews(reviewDTo.Id, id);
             }
-
             return reviewsDto;
         }
-
-
-
-
     }
 }
