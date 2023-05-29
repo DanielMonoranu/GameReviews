@@ -28,7 +28,7 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult<ReviewDTO>> Get(int id)
         {
 
-            var reviews = GetParentReviews(null, id);
+            var reviews = await GetParentReviews(null, id);
             if (reviews != null)
             {
                 return Ok(reviews);
@@ -40,7 +40,6 @@ namespace GameReviews.API.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Post([FromBody] ReviewCreationDTO reviewCreationDTO)
         {
-
             var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
             var user = await _userManager.FindByNameAsync(email);
             var review = _mapper.Map<Review>(reviewCreationDTO);
@@ -51,6 +50,7 @@ namespace GameReviews.API.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Put(int id, [FromBody] ReviewCreationDTO reviewCreationDTO)
         {
             var review = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
@@ -63,32 +63,51 @@ namespace GameReviews.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var isParent = await _context.Reviews.AnyAsync(x => x.ParentReviewId == id);
-            if (isParent == true)
-            {
-                var reviewsToBeDeleted = await _context.Reviews.Where(x => x.ParentReviewId == id).ToListAsync();
-                _context.Reviews.RemoveRange(reviewsToBeDeleted);
-            }
-
-            _context.Remove(new Review() { Id = id });
-            await _context.SaveChangesAsync();
+            await DeleteListOfReviews(id);
             return Ok();
         }
 
 
-        List<ReviewDTO> GetParentReviews(int? parentReviewId, int id)
+        private async Task<ActionResult> DeleteListOfReviews(int id)
         {
-            var reviews = _context.Reviews
+            var reviewToDelete = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
+            if (reviewToDelete != null)
+            {
+                var childrenReviews = await _context.Reviews.Where(r => r.ParentReviewId == id).ToListAsync();
+                if (childrenReviews.Count != 0)
+                {
+                    foreach (var childReview in childrenReviews)
+                    {
+                        await DeleteListOfReviews(childReview.Id);
+                    }
+                    _context.Remove(reviewToDelete);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _context.Remove(reviewToDelete);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return Ok();
+        }
+
+        private async Task<List<ReviewDTO>> GetParentReviews(int? parentReviewId, int id)
+        {
+            var reviews = await _context.Reviews
                 .Include(r => r.User)
                 .Where(r => r.ParentReviewId == parentReviewId && r.GameId == id)
-                .ToList();
+                .ToListAsync();
             var reviewsDto = _mapper.Map<List<ReviewDTO>>(reviews);
 
             foreach (var reviewDTo in reviewsDto)
             {
-                reviewDTo.ChildReviews = GetParentReviews(reviewDTo.Id, id);
+                reviewDTo.ChildReviews = await GetParentReviews(reviewDTo.Id, id);
             }
             return reviewsDto;
         }
+
+
+
     }
 }

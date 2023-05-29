@@ -10,6 +10,7 @@ import notify from '../Utilities/ToastErrors'
 import { RatingDTO } from '../Ratings/ratings.model';
 import Ratings from '../Ratings/Ratings';
 import AuthenticationContext from '../Auth/AuthenticationContext';
+import CustomConfirm from '../Utilities/CustomConfirm';
 
 export default function Review(props: ReviewProps) {
     const { id }: any = useParams();
@@ -25,7 +26,6 @@ export default function Review(props: ReviewProps) {
 
     const getUserEmail = (): string => {
         return claims.filter(claim => claim.name === 'email')[0]?.value;
-
     }
 
     useEffect(() => {
@@ -42,122 +42,72 @@ export default function Review(props: ReviewProps) {
         [{}]
     ];
 
-    // const handleChange = (value: number) => {
-    //     // console.log(value);
-    //     axios.post(`${urlRatings}`, { gameId: id, score: value }).then((response) => {
-    //         //console.log(response);
-    //         notify({ type: "success", message: [`You rated it ${value}`] });
-    //     }).catch((error) => {
-    //         notify({
-    //             type: "error",
-    //             message: error.response.data
-    //         });
-    //     });
-    //     /////////////!!!!!!!!!!!trebuie modificari
-    // }
 
-    const postReviews = async (text: string, review?: ReviewDTO) => {
-        // console.log(text);
-        // console.log(userScore);
-        //  console.log(review!);
 
+    const postComments = async (text: string, review?: ReviewDTO) => {
         if (text === '') {
             text = "Empty comment"
         }
-
         const reviewToPost: ReviewCreationDTO = {
             gameId: id,
             reviewText: text,
             parentReviewId: review?.id
         }
-        // await axios.post(`${urlReviews}`, reviewToPost).then((response) => {
-        //     console.log(response.data)
-        //     notify({ type: "success", message: ["Created succesfully"] });
-        //     history.go(0);  ///////////////////////asta ceva context
-        //     ///trebuie tratat aici raspunsul
-        //     return axios.post(`${urlRatings}`, { gameId: id, score: userScore });
-        // }).then(axios.post(`${urlRatings}`, { gameId: id, score: userScore }))
-
-
-        //     .catch((error) => {
-        //         notify({
-        //             type: "error",
-        //             message: ["You need to be logged in to post a review"]
-        //         });
-        //     });
-
         await axios.post(`${urlReviews}`, reviewToPost)
-            .then((response) => {
-                console.log(response.data);
+            .then(() => {
+                history.go(0);
                 notify({ type: "success", message: ["Created successfully"] });
-                history.go(0); // Refresh the page (assuming history is defined correctly)
-
-                // Return the next request to continue the chain
-                return axios.post(`${urlRatings}`, { gameId: id, score: userScore });
             })
-            .then((response) => {
-                // Handle the response of the second request
-                console.log(response.data);
-                // Add any further processing or notifications here
-            })
-            .catch((error) => {
+            .catch(() => {
                 notify({
                     type: "error",
-                    message: ["You need to be logged in to post a review"]
+                    // message: ["Network error"]
+                    message: ["You need to be logged in to post a comment"]
                 });
             });
 
 
     }
     const editReviews = async (text: string, review?: ReviewDTO) => {
-
-        console.log(text)
-        console.log(review)
-
         if (text === '') {
             text = "Empty comment"
         }
-
-        const reviewToPost: ReviewCreationDTO = {
-            gameId: props.reviews ? props.reviews[0].gameId : 0,
+        const reviewToPut: ReviewCreationDTO = {
+            gameId: id,
             reviewText: text,
-            parentReviewId: review?.id
         }
-        await axios.post(`${urlReviews}`, reviewToPost).then((response) => {
-            console.log(response.data)
-            notify({ type: "success", message: ["Created succesfully"] });
-            history.go(0);
-            ///trebuie tratat aici raspunsul
-        }).catch((error) => {
-            notify({
-                type: "error",
-                message: ["You need to be logged in to post a review"]
+        await axios.put(`${urlReviews}/${review!.id}`, reviewToPut)
+            .then(() => {
+                return axios.post(`${urlRatings}`, { gameId: id, score: userScore });
+            })
+            .then(() => {
+                notify({ type: "success", message: ["Edited successfully"] });
+                history.go(0);
+            })
+            .catch((error) => {
+                notify({
+                    type: "error",
+                    message: ["Network error"]
+                });
             });
-        });
+
+
     }
-    const deleteReviews = async (text: string, review?: ReviewDTO) => {
+    const deleteReviews = async (review: ReviewDTO) => {
+        <h2>{props.ratings?.find(rating => rating.user.email === review.user.email)?.score}</h2>
+        const ratingId = props.ratings?.find(rating => rating.user.email === review.user.email)?.id;
 
-        console.log(text)
-        console.log(review)
-
-        if (text === '') {
-            text = "Empty comment"
-        }
-
-        const reviewToPost: ReviewCreationDTO = {
-            gameId: props.reviews ? props.reviews[0].gameId : 0,
-            reviewText: text,
-            parentReviewId: review?.id
-        }
-        await axios.post(`${urlReviews}`, reviewToPost).then((response) => {
-            console.log(response.data)
-            notify({ type: "success", message: ["Created succesfully"] });
+        await axios.delete(`${urlReviews}/${review!.id}`,).then((response) => {
+            if (userScore !== 0) {
+                return axios.delete(`${urlRatings}/${ratingId}`);
+            }
+        }).then(() => {
+            notify({ type: "success", message: ["Deleted succesfully"] });
             history.go(0);
-            ///trebuie tratat aici raspunsul
         }).catch((error) => {
             notify({
                 type: "error",
-                message: ["You need to be logged in to post a review"]
+                message: ["Network error"]
             });
         });
     }
@@ -180,28 +130,23 @@ export default function Review(props: ReviewProps) {
                 }}>Add comment</button>
 
 
-                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={(value) => { setCanEdit(true) }
-                }>Edit</button>}
-                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => { }
-                }>Delete</button>}
+                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => { setCanEdit(true) }}>Edit</button>}
+
+                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => { CustomConfirm(() => deleteReviews(review)) }}>Delete</button>}
                 {getUserEmail() === review.user.email && canEdit && <>
                     < QuillReview text={review.reviewText} onEnter={(value) => {
-                        postReviews(value, review);
+                        editReviews(value, review);
                     }} />
                     <div>
-                        <button className="btn btn-danger m-1" onClick={() => {
-                            setCanEdit(false)
-                        }}>Cancel</button>
+                        <button className="btn btn-danger m-1" onClick={() => { setCanEdit(false) }}>Cancel</button>
                     </div>
                     {review.parentReviewId === null && <Ratings maxValue={10} onChange={(value) => setUserScore(value)} selectedValue={props.userScore} />}
-
-
                 </>}
 
                 {selectedReviewsId.includes(review.id) && <div className="m-3">
 
                     <QuillReview placeholder='Write your comment' onEnter={(value) => {
-                        postReviews(value, review);
+                        postComments(value, review);
                     }} />
 
                     <button className="btn btn-danger m-1" onClick={() => {
@@ -246,23 +191,6 @@ export default function Review(props: ReviewProps) {
 
             ))}
         </div >
-
-
-        {
-            props.hasReviewField && props.userScore === 0 &&
-            <>
-                <h2>Write your review</h2>
-                <QuillReview readonly={false} parentReview={true} placeholder="Write your review"
-                    onEnter={(value) => {
-                        postReviews(value)
-                        //console.log(props.ratings);
-                    }} />
-                <h2>Your rating:</h2>
-                <h2>{props.userScore}</h2>
-
-                <Ratings maxValue={10} onChange={(value) => setUserScore(value)} selectedValue={props.userScore} />
-            </>
-        }
     </>
 
 }
@@ -270,7 +198,6 @@ export default function Review(props: ReviewProps) {
 interface ReviewProps {
     reviews?: ReviewDTO[];
     isParent?: boolean;
-    hasReviewField?: boolean;
     ratings?: RatingDTO[];
     userScore: number;
 }

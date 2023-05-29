@@ -36,7 +36,7 @@ export default function UsersIndex() {
     }
 
     const removeAdmin = async (id: string) => {
-        console.log(id);
+        ///console.log(id);
         try {
             await axios.post(`${urlAccounts}/removeAdmin`, JSON.stringify(id), { headers: { 'Content-Type': 'application/json' } })
                 .then(() => { notify({ message: ["Removed successfully"], type: "success" }); })

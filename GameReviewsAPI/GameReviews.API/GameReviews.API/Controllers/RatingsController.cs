@@ -26,27 +26,24 @@ namespace GameReviews.API.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Post([FromBody] RatingCreationDTO ratingDTO)
+        public async Task<ActionResult> Post([FromBody] RatingCreationDTO ratingCreationDTO)
         {
             var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
             var user = await _userManager.FindByNameAsync(email);
             var userId = user.Id;
             var currentScore = await _context.Ratings
-                .FirstOrDefaultAsync(x => x.GameId == ratingDTO.GameId &&
+                .FirstOrDefaultAsync(x => x.GameId == ratingCreationDTO.GameId &&
                 x.UserId == userId);
+
             if (currentScore == null)
             {
-                var rating = new Rating()
-                {
-                    GameId = ratingDTO.GameId,
-                    Score = ratingDTO.Score,
-                    UserId = userId,
-                };
-                _context.Add(rating);
+                var ratingDto = _mapper.Map<Rating>(ratingCreationDTO);
+                ratingDto.UserId = userId;
+                _context.Add(ratingDto);
             }
             else
             {
-                currentScore.Score = ratingDTO.Score;
+                currentScore.Score = ratingCreationDTO.Score;
             }
             await _context.SaveChangesAsync();
             return Ok();
@@ -64,5 +61,20 @@ namespace GameReviews.API.Controllers
             }
             return BadRequest();
         }
+
+        [HttpDelete("{id:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var rating = await _context.Ratings.FirstOrDefaultAsync(r => r.Id == id);
+            if (rating != null)
+            {
+                _context.Remove(rating);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return BadRequest();
+        }
+
     }
 }

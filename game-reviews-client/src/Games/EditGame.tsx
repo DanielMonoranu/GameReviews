@@ -78,7 +78,7 @@ export default function EditGame() {
                 selectedPlatforms={gameToEdit.selectedPlatforms}
                 allPlaforms={gameToEdit.allPlatforms}
                 onSubmit={async values => {
-                    console.log(values)
+                    // console.log(values)
                     await editGame(values);
                 }} /> : <Loading />}
         </>

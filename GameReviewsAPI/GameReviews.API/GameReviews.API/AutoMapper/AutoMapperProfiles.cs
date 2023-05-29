@@ -35,11 +35,13 @@ namespace GameReviews.API.AutoMapper
                 .ForMember(x => x.Platforms, options => options.MapFrom(MapGamePlatforms))
                 .ForMember(x => x.Developers, options => options.MapFrom(MapGameDeveloper));
 
+            CreateMap<ApplicationUser, UserDTO>();
+
             CreateMap<Review, ReviewDTO>();
             CreateMap<ReviewCreationDTO, Review>();
 
-            CreateMap<ApplicationUser, UserDTO>();
             CreateMap<Rating, RatingDTO>();
+            CreateMap<RatingCreationDTO, Rating>();
         }
 
         private List<GenreDTO> MapGameGenres(Game game, GameDTO gameDto)
