@@ -2,6 +2,7 @@
 using GameReviews.API.DTOs.IntermediateDTOs;
 using GameReviews.API.Entities;
 using GameReviews.API.Helpers;
+using GameReviews.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,9 +24,14 @@ namespace GameReviews.API.Controllers
         private readonly IFileStorageService _fileStorageService;
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
+        private readonly IReviewsService _reviewsService;
         private readonly IMapper _mapper;
         private string container = "userspictures";
-        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IFileStorageService fileStorageService, ApplicationDbContext context, IMapper mapper)
+        private string userType = "User";
+        private string pictureString = "https://gamereviewsapi.blob.core.windows.net/userspictures/23bc1d0e-6d9a-4b93-a5c4-cdc43be653f3.png";
+
+        public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration, IFileStorageService fileStorageService, ApplicationDbContext context, IMapper mapper, IReviewsService reviewsService)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -33,11 +39,13 @@ namespace GameReviews.API.Controllers
             _fileStorageService = fileStorageService;
             _context = context;
             _mapper = mapper;
+            _reviewsService = reviewsService;
         }
         [HttpPost("create")]
         public async Task<ActionResult<AuthenticationResponseDTO>> Create([FromForm] UserCreationDTO userCreation)
         {
             var user = new ApplicationUser { UserName = userCreation.Email, Email = userCreation.Email };
+            user.Type = userType;
             var result = await _userManager.CreateAsync(user, userCreation.Password);
 
             var userCredentials = new UserCredentialsDTO() { Email = userCreation.Email, Password = userCreation.Password };
@@ -49,11 +57,10 @@ namespace GameReviews.API.Controllers
                 }
                 else
                 {
-                    user.ProfilePicture = string.Empty;
+                    user.ProfilePicture = pictureString;
                 }
                 await _userManager.UpdateAsync(user);
-                //  Claim claimToSend = new Claim("type", "user");
-                //await _userManager.AddClaimAsync(user, claimToSend);
+
                 return BuildToken(userCredentials, user.ProfilePicture);
             }
             else
@@ -78,14 +85,6 @@ namespace GameReviews.API.Controllers
                     {
                         claimToSend = new Claim("role", "admin");
                     }
-                    /*else if (claim.Value == "critic")
-                    {
-                        claimToSend = new Claim("type", "critic");
-                    }
-                    else
-                    {
-                        claimToSend = new Claim("type", "user");
-                    }*/
                 }
                 return BuildToken(userCredentials, user.ProfilePicture, claimToSend);
             }
@@ -113,7 +112,10 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult> MakeAdmin([FromBody] string id)
         {
             var user = await _userManager.FindByIdAsync(id);
+            if (user is null) return NotFound();
             await _userManager.AddClaimAsync(user, new Claim("role", "admin"));
+            user.Type = "Admin";
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
@@ -122,7 +124,10 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult> RemoveAdmin([FromBody] string id)
         {
             var user = await _userManager.FindByIdAsync(id);
+            if (user is null) return NotFound();
             await _userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
+            user.Type = "User";
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
@@ -132,7 +137,9 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult> MakeCritic([FromBody] string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            await _userManager.AddClaimAsync(user, new Claim("type", "critic"));
+            if (user is null) return NotFound();
+            user.Type = "Critic";
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
@@ -141,9 +148,37 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult> RemoveCritic([FromBody] string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            await _userManager.RemoveClaimAsync(user, new Claim("type", "critic"));
+            if (user is null) return NotFound();
+            user.Type = "User";
+            await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPost("deleteAccount")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
+        public async Task<ActionResult> Delete([FromBody] string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            var reviewToDelete = await _context.Reviews.Where(x => x.UserId == id).Select(r => r.Id).ToListAsync();
+            foreach (var review in reviewToDelete)
+            {
+                try
+                {
+                    await _reviewsService.DeleteListOfReview(review);
+                }
+                catch { }
+            }
+            if (user is null) return NotFound();
+            await _userManager.DeleteAsync(user);
+            if (user.ProfilePicture != null)
+            {
+                await _fileStorageService.DeleteFile(user.ProfilePicture, container);
+            }
+            return Ok();
+        }
+
+
         private AuthenticationResponseDTO BuildToken(UserCredentialsDTO userCredentialsDTO, string? profilePicture, Claim? claim = null)
         {
 

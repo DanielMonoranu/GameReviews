@@ -6,6 +6,7 @@ using GameReviews.API.AutoMapper;
 using GameReviews.API.Entities;
 using GameReviews.API.Filters;
 using GameReviews.API.Helpers;
+using GameReviews.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,7 @@ builder.Services.AddControllers(options =>  //for filters
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 builder.Services.AddScoped<IFileStorageService, AzureStorageService>();
-
+builder.Services.AddTransient<IReviewsService, ReviewsService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

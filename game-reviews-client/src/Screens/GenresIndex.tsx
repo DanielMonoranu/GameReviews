@@ -9,8 +9,6 @@ import Pagination from "../Utilities/Pagination";
 import RecordsPerPageSelect from "../Utilities/RecordsPerPageSelect";
 import CustomConfirm from "../Utilities/CustomConfirm";
 
-
-
 export default function GenresIndex() {
     const [genres, setGenres] = useState<genreDTO[]>([]);
     const [totalAmountOfPages, setTotalAmountOfPages] = useState(0);

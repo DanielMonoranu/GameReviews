@@ -15,7 +15,7 @@ import LandingPage from "./Screens/LandingPage";
 import PlatformIndex from "./Screens/PlatformIndex";
 import RedirectToLandingPage from "./Utilities/RedirectToLandingPage";
 import Review from "./Reviews/Review";
-import ReviewIndex from "./Screens/ReviewIndex";
+import ReviewIndex from "./Screens/ReviewsIndex";
 import RegisterUser from "./Auth/RegisterUser";
 import Login from "./Auth/LoginUser";
 import LoginUser from "./Auth/LoginUser";
@@ -37,7 +37,7 @@ const routes = [
     { path: "/platforms/edit/:id(\\d+)", component: EditPlatform, isAdmin: true },
 
     { path: "/games", component: GameIndex, exact: true },
-    { path: "/games/create", component: CreateGame },
+    { path: "/games/create", component: CreateGame, isAdmin: true },
     { path: "/games/edit/:id(\\d+)", component: EditGame, isAdmin: true },
     { path: "/games/filter", component: FilterGames },
     { path: "/games/:id(\\d+)", component: GameFeatures },

@@ -11,8 +11,12 @@ import { RatingDTO } from '../Ratings/ratings.model';
 import Ratings from '../Ratings/Ratings';
 import AuthenticationContext from '../Auth/AuthenticationContext';
 import CustomConfirm from '../Utilities/CustomConfirm';
+import { ref } from 'yup';
+import { RefreshContext } from '../Utilities/RefreshContext';
 
 export default function Review(props: ReviewProps) {
+    const refreshPage = useContext(RefreshContext) //!!
+
     const { id }: any = useParams();
     const history = useHistory();
     const [selectedReviewsId, setSelectedReviewsId] = useState<number[]>([0]);
@@ -55,8 +59,8 @@ export default function Review(props: ReviewProps) {
         }
         await axios.post(`${urlReviews}`, reviewToPost)
             .then(() => {
-                history.go(0);
-                notify({ type: "success", message: ["Created successfully"] });
+                refreshPage();
+                notify({ type: "success", message: ["Comment created"] });
             })
             .catch(() => {
                 notify({
@@ -82,7 +86,8 @@ export default function Review(props: ReviewProps) {
             })
             .then(() => {
                 notify({ type: "success", message: ["Edited successfully"] });
-                history.go(0);
+                refreshPage();
+
             })
             .catch((error) => {
                 notify({
@@ -102,8 +107,9 @@ export default function Review(props: ReviewProps) {
                 return axios.delete(`${urlRatings}/${ratingId}`);
             }
         }).then(() => {
+
             notify({ type: "success", message: ["Deleted succesfully"] });
-            history.go(0);
+            refreshPage();
         }).catch((error) => {
             notify({
                 type: "error",
@@ -113,8 +119,7 @@ export default function Review(props: ReviewProps) {
     }
 
 
-
-    return <>
+    return < >
         <div >
             {props.reviews?.map((review, index) =>
             (<div
@@ -132,21 +137,29 @@ export default function Review(props: ReviewProps) {
 
                 {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => { setCanEdit(true) }}>Edit</button>}
 
-                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => { CustomConfirm(() => deleteReviews(review)) }}>Delete</button>}
-                {getUserEmail() === review.user.email && canEdit && <>
+                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => {
+                    CustomConfirm(() =>
+                        deleteReviews(review))
+                }}>Delete</button>}
+
+                {/* FOR EDIT */}
+                {canEdit && getUserEmail() === review.user.email && <>
                     < QuillReview text={review.reviewText} onEnter={(value) => {
                         editReviews(value, review);
+                        setCanEdit(false);
                     }} />
                     <div>
                         <button className="btn btn-danger m-1" onClick={() => { setCanEdit(false) }}>Cancel</button>
                     </div>
+                    <h1>{props.userScore}</h1>
                     {review.parentReviewId === null && <Ratings maxValue={10} onChange={(value) => setUserScore(value)} selectedValue={props.userScore} />}
                 </>}
 
+                {/* FOR COMMENTS */}
                 {selectedReviewsId.includes(review.id) && <div className="m-3">
-
                     <QuillReview placeholder='Write your comment' onEnter={(value) => {
                         postComments(value, review);
+                        setSelectedReviewsId(selectedReviewsId.filter((id) => id !== review.id));
                     }} />
 
                     <button className="btn btn-danger m-1" onClick={() => {
@@ -191,7 +204,7 @@ export default function Review(props: ReviewProps) {
 
             ))}
         </div >
-    </>
+    </ >
 
 }
 

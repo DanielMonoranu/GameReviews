@@ -17,7 +17,6 @@ import AuthenticationContext from "../Auth/AuthenticationContext";
 export default function GameFeatures() {
     const { id }: any = useParams();
     const [game, setGame] = useState<gameDTO>();
-    //add functionality for ratin
     const { claims } = useContext(AuthenticationContext);
     const userIsLogged = claims?.length > 0;
 
@@ -26,8 +25,12 @@ export default function GameFeatures() {
             .then((response: AxiosResponse<gameDTO>) => {
                 response.data.releaseDate = new Date(response.data.releaseDate);
                 setGame(response.data);
-            })
-
+            }).catch((error) => {
+                notify({
+                    type: "error",
+                    message: ["No game found"]
+                });
+            });
     }, [id, game?.userScore]) ///!
 
     const modules = { //for reactQuill
@@ -51,21 +54,6 @@ export default function GameFeatures() {
         }
     }
 
-    // const handleChange = (value: number) => {
-    //     // console.log(value);
-    //     axios.post(`${urlRatings}`, { gameId: id, score: value }).then((response) => {
-    //         //console.log(response);
-    //         notify({ type: "success", message: [`You rated it ${value}`] });
-    //     }).catch((error) => {
-    //         notify({
-    //             type: "error",
-    //             message: error.response.data
-    //         });
-    //     });
-    //     /////////////!!!!!!!!!!!trebuie modificari
-    // }
-
-
     return (
         game ? <div>
             <h2>{game.name} ({game.releaseDate.getFullYear()})</h2>
@@ -76,7 +64,7 @@ export default function GameFeatures() {
                 readonly={true} selectedValue={game.userScore} onChange={(value) => { }} /> </> : null}
 
             | Average vote Critics: {game.averageScoreCritics} | Average vote Users: {game.averageScoreUsers}
-            {/* ({game.numberOfVotes} votes) */}
+            {/* ({game.numberOfVotes} votes) //ar fi nice*/}
 
             <div style={{ display: 'flex', marginTop: '1rem' }}>
                 <span style={{ display: 'inline-block', marginRight: '1rem' }}>
@@ -118,12 +106,15 @@ export default function GameFeatures() {
                     to={`/games/filter?platformId=${platform.id}`}
                 >{platform.name}</Link>)}</div> : null}
 
-            <TwitchLink gameName={game.name} />
-            <SteamLink gameName={game.name} />
 
-            <div>
-                <Link className="btn btn-primary" to={`/reviews/${id}`}>See reviews</Link>
-            </div>
+            {game.releaseDate < new Date() ?
+                <div>
+                    <TwitchLink gameName={game.name} />
+                    <SteamLink gameName={game.name} />
+                    <Link className="btn btn-primary" to={`/reviews/${id}`}>See reviews</Link>
+                </div>
+                : <div>The game is not released yet. Come back on {game.releaseDate.toLocaleDateString()}</div>}
+
         </div> : <Loading />
     );
 }

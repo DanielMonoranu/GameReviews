@@ -35,7 +35,6 @@ export default function Menu() {
                         <Authorized
                             role="admin"
                             authorized={<>
-
                                 <li className="nav-item">
                                     <NavLink className="nav-link" to="/genres">
                                         Genres

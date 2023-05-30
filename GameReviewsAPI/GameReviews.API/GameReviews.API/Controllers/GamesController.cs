@@ -65,19 +65,6 @@ namespace GameReviews.API.Controllers
                     .AverageAsync(x => x.Score);
                 }
                 catch { }
-
-                /*if (HttpContext.User.Identity.IsAuthenticated)
-                {
-                    var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
-                    var user = await _userManager.FindByNameAsync(email);
-                    var userId = user.Id;
-                    userType = user.Type;
-                    var ratingTable = await _context.Ratings.FirstOrDefaultAsync(x => x.GameId == id && x.UserId == userId);
-                    if (ratingTable != null)
-                    {
-                        userScore = ratingTable.Score;
-                    }
-                }*/
             }
             if (HttpContext.User.Identity.IsAuthenticated)
             {

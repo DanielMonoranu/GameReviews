@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,15 @@ namespace GameReviews.API.Helpers
             IQueryable<T> queryable)
         {
             if (httpContext == null) { throw new ArgumentNullException(nameof(httpContext)); }
-            double count = await queryable.CountAsync();
+            double count = 0.0;
+            if (queryable.Provider is IAsyncQueryProvider)
+            {
+                count = await queryable.CountAsync();
+            }
+            else
+            {
+                count = queryable.Count();
+            }
             httpContext.Response.Headers.Add("totalAmountOfRecords", count.ToString());
         }
     }
