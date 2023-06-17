@@ -1,0 +1,11 @@
+.checked.red {
+    color: red;
+}
+
+.checked.yellow {
+    color: rgb(250, 184, 1);
+}
+
+.checked.green {
+    color: green;
+}

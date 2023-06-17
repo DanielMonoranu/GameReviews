@@ -34,12 +34,12 @@ export default function CreateGame() {
 
     }, [])
 
-    async function createGame(game: gameCreationDTO) {
+    const createGame = async (game: gameCreationDTO) => {
         const formData = convertGameToFormData(game);
 
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        // }
 
         await axios({
             method: "post",
@@ -47,7 +47,6 @@ export default function CreateGame() {
             data: formData,
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then((gamePosted) => {
-
             history.push(`/games/${gamePosted.data}`);
             notify({ type: "success", message: ["Created succesfully"] });
         }).catch((error) => {

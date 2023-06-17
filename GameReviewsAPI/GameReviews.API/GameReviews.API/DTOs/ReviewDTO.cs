@@ -1,4 +1,5 @@
-﻿using GameReviews.API.Entities;
+﻿using GameReviews.API.DTOs.IntermediateDTOs;
+using GameReviews.API.Entities;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GameReviews.API.DTOs
@@ -10,5 +11,8 @@ namespace GameReviews.API.DTOs
         public int? ParentReviewId { get; set; }
         public List<ReviewDTO> ChildReviews { get; set; }
         public int GameId { get; set; }
+        public UserDTO User { get; set; }
+
+
     }
 }

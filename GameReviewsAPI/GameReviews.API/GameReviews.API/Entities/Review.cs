@@ -12,5 +12,7 @@ namespace GameReviews.API.Entities
         public List<Review> ChildReviews { get; set; }
         public int GameId { get; set; }
         public Game Game { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }
