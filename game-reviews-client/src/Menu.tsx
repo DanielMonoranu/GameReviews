@@ -11,7 +11,11 @@ export default function Menu() {
         return claims.filter(claim => claim.name === 'email')[0]?.value;
 
     }
-    // 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
+    const ifUser = () => {
+        return claims.findIndex(claim => claim.name === 'type' &&
+            claim.value === 'User') > -1;
+    }
+
     const getProfilePicture = (): string => {
         if (claims.filter(claim => claim.name === 'profilePicture')[0]?.value) {
             return claims.filter(claim => claim.name === 'profilePicture')[0]?.value;
@@ -29,7 +33,12 @@ export default function Menu() {
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
                             <NavLink className="nav-link" to="/games/filter">
-                                Filter games
+                                Search
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link" to="/games">
+                                Games
                             </NavLink>
                         </li>
                         <Authorized
@@ -50,11 +59,7 @@ export default function Menu() {
                                         Platforms
                                     </NavLink>
                                 </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" to="/games">
-                                        Games ??
-                                    </NavLink>
-                                </li>
+
 
                                 <li className="nav-item">
                                     <NavLink className="nav-link" to="/users">
@@ -63,11 +68,20 @@ export default function Menu() {
                                 </li>
                             </>}
                         />
+                        {ifUser() && <li className="nav-item">
+                            <NavLink className="nav-link" to="/becomeCritic">
+                                Become a Critic
+                            </NavLink>
+                        </li>}
+
                     </ul>
+
+
+
                     <div className="d-flex">
                         <Authorized authorized={<>
                             {/* <span className="nav-link">Welcome, {localStorage.getItem('name')}</span> */}
-                            <span className="nav-link">Welcome,  {getUserEmail()}</span>
+                            <Link className="nav-link" to="/changeCredentials" >Welcome,  {getUserEmail()}</Link>
                             {/* modify profile picture */}
                             <img src={getProfilePicture()} alt="profile" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
                             <button className="nav-link btn btn-link" onClick={() => {

@@ -20,6 +20,9 @@ import RegisterUser from "./Auth/RegisterUser";
 import Login from "./Auth/LoginUser";
 import LoginUser from "./Auth/LoginUser";
 import UsersIndex from "./Screens/UsersIndex";
+import BecomeCritic from "./Screens/BecomeCriticIndex";
+import ChangeCredentials from "./Screens/ChangeCredentialsIndex";
+import ChangeCredentialsIndex from "./Screens/ChangeCredentialsIndex";
 
 const routes = [
     { path: "/", component: LandingPage, exact: true },
@@ -47,6 +50,10 @@ const routes = [
     { path: "/register", component: RegisterUser },
     { path: "/login", component: LoginUser },
     { path: "/users", component: UsersIndex, isAdmin: true },
+
+    { path: "/becomeCritic", component: BecomeCritic, isUser: true },
+    { path: "/changeCredentials", component: ChangeCredentialsIndex, isAuthenticated: true },
+
 
 
 

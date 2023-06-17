@@ -29,9 +29,10 @@ builder.Services.AddControllers(options =>  //for filters
 
 //autoMapper:
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
-
 builder.Services.AddScoped<IFileStorageService, AzureStorageService>();
 builder.Services.AddTransient<IReviewsService, ReviewsService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

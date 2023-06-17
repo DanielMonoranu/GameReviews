@@ -32,6 +32,10 @@ export default function Review(props: ReviewProps) {
         return claims.filter(claim => claim.name === 'email')[0]?.value;
     }
 
+    const getUserRole = (): string => {
+        return claims.filter(claim => claim.name === 'role')[0]?.value;
+    }
+
     useEffect(() => {
         setUserScore(props.userScore);
     }, [props.userScore])
@@ -130,9 +134,9 @@ export default function Review(props: ReviewProps) {
                 <div>Info: {review.user.type} {review.user.email}   <img src={review.user.profilePicture} alt="profile"
                     style={{ width: '30px', height: '30px', borderRadius: '50%' }} /></div>
 
-                <button className="btn btn-primary m-3" onClick={() => {
+                {getUserRole() !== "admin" && <button className="btn btn-primary m-3" onClick={() => {
                     setSelectedReviewsId([...selectedReviewsId, review.id]);
-                }}>Add comment</button>
+                }}>Add comment</button>}
 
 
                 {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => { setCanEdit(true) }}>Edit</button>}
@@ -200,6 +204,8 @@ export default function Review(props: ReviewProps) {
                     <Ratings maxValue={10} selectedValue={props.ratings?.find(rating => rating.user.email === review.user.email)?.score!}
                         readonly={true} />
                 </>}
+
+
             </div>
 
             ))}

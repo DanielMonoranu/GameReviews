@@ -13,10 +13,7 @@ export default function Authorized(props: authorizedProps) {
         } else {
             setIsAuthorized(claims.length > 0); ///probabil schimbat
         }
-
-
     }, [claims, props.role])
-
 
     return (<>
         {isAuthorized ? props.authorized : props.notAuthorized}

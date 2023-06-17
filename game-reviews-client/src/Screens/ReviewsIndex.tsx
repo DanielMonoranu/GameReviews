@@ -126,8 +126,7 @@ export default function ReviewsIndex() {
                 <UserReview userRatings={userRatings} gameId={id} userScore={userScore} refreshState={refreshState} />
             </div>
 
-            {
-                ifAdmin() !== true && hasRated === false &&
+            {ifAdmin() !== true && hasRated === false &&
                 <div>
                     <h2>Write your review:</h2>
                     <QuillReview readonly={false} parentReview={true} placeholder="Write your review"

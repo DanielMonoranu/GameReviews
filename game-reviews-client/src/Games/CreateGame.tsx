@@ -34,7 +34,7 @@ export default function CreateGame() {
 
     }, [])
 
-    async function createGame(game: gameCreationDTO) {
+    const createGame = async (game: gameCreationDTO) => {
         const formData = convertGameToFormData(game);
 
         // for (var pair of formData.entries()) {

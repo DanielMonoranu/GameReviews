@@ -105,45 +105,6 @@ namespace GameReviews.API.Controllers
             return Ok();
         }
 
-        /*
-                private async Task<ActionResult> DeleteListOfReviews(int id)
-                {
-                    var reviewToDelete = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
-                    if (reviewToDelete != null)
-                    {
-                        var childrenReviews = await _context.Reviews.Where(r => r.ParentReviewId == id).ToListAsync();
-                        if (childrenReviews.Count != 0)
-                        {
-                            foreach (var childReview in childrenReviews)
-                            {
-                                await DeleteListOfReviews(childReview.Id);
-                            }
-                            _context.Remove(reviewToDelete);
-                            await _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            _context.Remove(reviewToDelete);
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                    return Ok();
-                }*/
-
-        /*        private List<ReviewDTO> GetParentReviews(int? parentReviewId, int id)
-                {
-                    var reviews = _context.Reviews
-                        .Include(r => r.User)
-                        .Where(r => r.ParentReviewId == parentReviewId && r.GameId == id)
-                        .AsQueryable();
-                    var reviewsDto = _mapper.Map<List<ReviewDTO>>(reviews);
-
-                    foreach (var reviewDTo in reviewsDto)
-                    {
-                        reviewDTo.ChildReviews = GetParentReviews(reviewDTo.Id, id);
-                    }
-                    return reviewsDto;
-                }*/
 
         private async Task<List<ReviewDTO>> GetParentReviews(int? parentReviewId, int id)
         {

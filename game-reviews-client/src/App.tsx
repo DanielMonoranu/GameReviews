@@ -31,6 +31,14 @@ function App() {
     return claims.findIndex(claim => claim.name === 'role' &&
       claim.value === 'admin') > -1;
   }
+  const isUser = () => {
+    return claims.findIndex(claim => claim.name === 'type' &&
+      claim.value === 'User') > -1;
+  }
+
+  const isAuthenticated = () => {
+    return claims.length === 0;
+  }
 
   return (
     <BrowserRouter>
@@ -43,8 +51,11 @@ function App() {
           <Switch>
             {routes.map(route =>
               <Route key={route.path} path={route.path} exact={route.exact} >
-                {route.isAdmin && !isAdmin() ? <h1>Not authorized to see this page</h1> : <route.component />}
-
+                {route.isAdmin && !isAdmin() ? <h1>Not authorized to see this page</h1> :
+                  route.isAuthenticated && isAuthenticated() ? <h1>Not authorized to see this page</h1> :
+                    route.isUser &&
+                      !isUser() && !isAdmin() ? <h1>Not authorized to see this page</h1> :
+                      <route.component />}
               </Route>
             )}
           </Switch>

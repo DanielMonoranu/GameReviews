@@ -74,9 +74,17 @@
               "target": "Package",
               "version": "[7.0.5, )"
             },
+            "Microsoft.TestPlatform.ObjectModel": {
+              "target": "Package",
+              "version": "[17.6.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.28.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
