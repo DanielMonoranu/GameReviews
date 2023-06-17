@@ -111,7 +111,7 @@ export default function FilterGames() {
         history.push(`/games/filter?${query.join('&')}`);
     }
 
-
+    //////////////////////////trebe adaugat si multiplayer
     return (<>
         <h3>Filter Games</h3>
         <Formik initialValues={initialValues}
@@ -191,6 +191,4 @@ interface filterGamesValues {
     upcomingRelease: boolean;
     released: boolean;
     multiplayer: boolean;
-
-
 }

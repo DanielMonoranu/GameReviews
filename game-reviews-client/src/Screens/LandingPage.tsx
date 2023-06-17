@@ -5,7 +5,8 @@ import GamesList from "../Games/GamesList"
 import SingleGame from "../Games/SingleGame"
 import axios, { AxiosResponse } from "axios";
 import { urlGames } from "../endpoints";
-import RefreshContext from "../Utilities/RefreshContext";
+import Authorized from "../Auth/Authorized";
+import { RefreshContext } from "../Utilities/RefreshContext";
 
 export default function LandingPage() {
     const [games, setGames] = useState<landingPageDTO>({});
@@ -19,6 +20,7 @@ export default function LandingPage() {
             setGames(response.data);
         })
     }
+
     return (<RefreshContext.Provider value={() => loadData()}>
         <div>
             Released:

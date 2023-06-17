@@ -3,6 +3,8 @@ using GameReviews.API.DTOs;
 using GameReviews.API.DTOs.IntermediateDTOs;
 using GameReviews.API.Entities;
 using GameReviews.API.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,8 @@ namespace GameReviews.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
+
     public class PlatformsController : ControllerBase
     {
         private readonly ILogger<PlatformsController> _logger;
@@ -34,6 +38,7 @@ namespace GameReviews.API.Controllers
             return Ok(platformsdto);
         }
         [HttpGet("all")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<PlatformDTO>>> Get()
         {
             var platforms = await _context.Platforms.OrderBy(u => u.Name).ToListAsync();

@@ -15,6 +15,8 @@ namespace GameReviews.API.APIBehaviour
             options.InvalidModelStateResponseFactory = (context) =>
             {
                 var response = new List<string>();
+                var identityErrors = context.ModelState.Keys.Where(key => key.StartsWith("Identity_"));
+
                 foreach (var key in context.ModelState.Keys)
                 {
                     foreach (var error in context.ModelState[key].Errors)

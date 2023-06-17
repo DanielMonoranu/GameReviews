@@ -10,22 +10,10 @@ import { urlReviews } from "../endpoints";
 export default function GameIndex() {
     const [review, setReview] = useState<ReviewDTO[]>()
 
-    useEffect(() => {
-
-        axios.get(`${urlReviews}/1029`).then((response) => {
-
-            // console.log(response.data)
-            setReview(response.data)
-
-        })
-    }, [])
-
     return (
         <>
-            {/* <Link className="btn btn-primary" to="games/create">Create Game</Link> */}
-            <div >
-                <Review reviews={review} isParent={true} />
-            </div>
+            <Link className="btn btn-primary" to="games/create">Create Game</Link>
+
         </>
     )
 }

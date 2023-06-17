@@ -1,5 +1,6 @@
 ﻿using GameReviews.API.Entities;
 using GameReviews.API.Entities.IntermediateEntities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameReviews.API
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
@@ -45,6 +46,7 @@ namespace GameReviews.API
         public DbSet<GamesDevelopers> GamesDevelopers { get; set; }
         public DbSet<GamesPlatforms> GamesPlatforms { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
 
     }

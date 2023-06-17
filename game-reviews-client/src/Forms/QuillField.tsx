@@ -18,7 +18,7 @@ export default function QuillField(props: quillFieldProps) {
             <div>
                 <label htmlFor={props.field}> {props.displayName}</label>
                 <Field name={props.field} id={props.field} >
-                    {() => (<ReactQuill placeholder={"Write the description of the game"} value={text} onChange={handleChange}  ></ReactQuill>)}
+                    {() => (<ReactQuill placeholder={props.placeholder} value={text} onChange={handleChange}  ></ReactQuill>)}
                 </Field>
             </div>
 
@@ -29,10 +29,12 @@ interface quillFieldProps {
     displayName: string;
     field: string;
     default?: string;
-
+    placeholder?: string;
+}
+QuillField.defaultProps = {
+    placeholder: "Write the description of the game"
 }
 export interface multipleSelectModel {
     key: number;
     value: string;
-
 } 
