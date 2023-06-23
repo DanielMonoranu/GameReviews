@@ -37,10 +37,9 @@ export default function BecomeCritic() {
             });
     }
 
-    return (<>
-        <h2>If you want to become a critic please fill this form</h2>
-        <div>Please state who you are and why would you be a critic for our website. You can send links to your publication and additionaly, an image to confirm your identity </div>
-        {/* <div>email: {getUserEmail()}</div> */}
+    return (<div className="container">
+        <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >If you want to become a critic please fill this form </h1>
+        <span>Please state who you are and why would you be a critic for this website. You can send links to your publication and additionaly, an image to confirm your identity.</span>
         <div>
 
             <Formik initialValues={{ text: '', email: '' }}
@@ -51,13 +50,13 @@ export default function BecomeCritic() {
                     <Form>
                         <QuillField displayName="" field="text" placeholder="Please describe yourself" />
                         <ImageField displayName="" field="image" />
-                        <button type="submit" className="btn btn-primary" >Send</button>
-                        <Link className="btn btn-secondary" to="/genres"  >Cancel</Link>
+                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#7A82FF", border: "#7A82FF" }}  >Send</button>
+                        <Link className="btn btn-secondary" to="/genres" style={{ backgroundColor: "grey", border: "grey" }}  >Cancel</Link>
                     </Form>
                 )}
             </Formik>
         </div>
-    </>)
+    </div >)
 }
 
 

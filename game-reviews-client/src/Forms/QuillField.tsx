@@ -18,7 +18,7 @@ export default function QuillField(props: quillFieldProps) {
             <div>
                 <label htmlFor={props.field}> {props.displayName}</label>
                 <Field name={props.field} id={props.field} >
-                    {() => (<ReactQuill placeholder={props.placeholder} value={text} onChange={handleChange}  ></ReactQuill>)}
+                    {() => (<ReactQuill style={{ backgroundColor: "beige" }} placeholder={props.placeholder} value={text} onChange={handleChange}  ></ReactQuill>)}
                 </Field>
             </div>
 

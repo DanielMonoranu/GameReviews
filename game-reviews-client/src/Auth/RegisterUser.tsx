@@ -21,7 +21,7 @@ export default function RegisterUser() {
             const formData = convertAuthToFormData(userCredentials);
             await axios({ method: "post", url: `${urlAccounts}/create`, data: formData, headers: { 'Content-Type': 'multipart/form-data' } })
                 .then((response) => {
-                    //console.log(response.data);
+
                     saveToken(response.data);
                     update(getClaims());
                     history.push("/");
@@ -47,9 +47,9 @@ export default function RegisterUser() {
 
 
     return (
-        <>
-            <h3>Register</h3>
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Register </h1>
             <AutthenticationForm model={{ email: '', password: '' }} onSubmit={async values => await registerUser(values)} isRegister={true} />
-        </>
+        </div>
     )
 }

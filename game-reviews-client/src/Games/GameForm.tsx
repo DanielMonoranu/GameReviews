@@ -57,12 +57,11 @@ export default function GameForm(props: gameFormProps) {
                         displayName='Platforms'
                         field='platformsIDs'
                     />
-                    <button disabled={formikProps.values.name === ''} type="submit" className="btn btn-primary" >Save Changes</button>
-                    <Link className="btn btn-secondary" to="/genres"  >Cancel</Link>
+                    <button disabled={formikProps.values.name === '' || !formikProps.isValid} type="submit" style={{ backgroundColor: "#7A82FF", border: "#7A82FF", marginBottom: '20px' }} className="btn btn-primary" >Save Changes</button>
+                    <Link className="btn btn-secondary" to="/genres" style={{ marginRight: '25px', backgroundColor: "#DC3545", border: "#DC3545", marginBottom: '20px' }}  >Cancel</Link>
                 </Form>)}
         </Formik >
     )
-
 }
 interface gameFormProps {
     model: gameCreationDTO;

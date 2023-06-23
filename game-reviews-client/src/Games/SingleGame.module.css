@@ -1,11 +1,10 @@
 .div {
     margin-right: 2%;
-    margin-bottom: 10px;
     text-align: center;
 }
 
 .div p {
-    height: 44px;
+    height: 35px;
     font-size: 15px;
     font-weight: bold;
 }

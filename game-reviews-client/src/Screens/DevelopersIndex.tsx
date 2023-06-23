@@ -48,43 +48,48 @@ export default function DevelopersIndex() {
     }
 
     return (
-        <>
-            <h3>Developers</h3>
-            <Link className="btn btn-primary" to="developers/create">Create Developer</Link>
-
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >All Developers </h1>
+            <Link className="btn btn-primary" style={{ marginBottom: "10px" }} to="developers/create">Create Developer</Link>
 
             <RecordsPerPageSelect onChangeRecords={amountOfRecords => {
                 setCurrentPage(1);
                 setRecordsPerPage(amountOfRecords);
             }} />
 
-            <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
-                onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)}
-            />
 
-            <GenericList list={developers}   >
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {developers?.map(developer =>
-                            <tr key={developer.id}>
-                                <td>
-                                    {developer.name}
-                                </td>
-                                <td  >
-                                    <Link className="btn btn-success" to={`/developers/edit/${developer.id}`}>Edit</Link>
-                                    <button className="btn btn-danger"
-                                        onClick={() => CustomConfirm(() => deleteDeveloper(developer.id))}>Delete</button>
-                                </td>
-                            </tr>)}
-                    </tbody>
-                </table>
+            <GenericList list={developers}  >
+                <div style={{ border: ' 1px solid black', borderRadius: '20px' }}>
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}>  Name</span>
+                                </th>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}> Modify</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {developers?.map(developer =>
+                                <tr key={developer.id}>
+                                    <td>
+                                        {developer.name}
+                                    </td>
+                                    <td  >
+                                        <  Link className="btn btn-success" style={{ marginRight: '25px', backgroundColor: "#7A82FF", border: "#7A82FF" }} to={`/developers/edit/${developer.id}`}>Edit</Link>
+                                        <button className="btn btn-danger" style={{ marginRight: '25px', backgroundColor: "#DC3545", border: "#DC3545" }} onClick={() => CustomConfirm(() => deleteDeveloper(developer.id))}>Delete</button>
+                                    </td>
+                                </tr>)}
+                        </tbody>
+                    </table>
+                </div>
             </GenericList >
-        </>
+            <div style={{ marginTop: "20px" }}>
+                <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
+                    onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)} />
+            </div>
+        </div >
     )
 }

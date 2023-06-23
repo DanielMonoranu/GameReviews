@@ -45,13 +45,13 @@ export default function EditDeveloper() {
     }
 
     return (
-        <>
-            <h3>Edit Developer</h3>
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Edit Developer </h1>
             {developer ? <DeveloperForm
                 model={developer}
                 onSubmit={async value => {
                     await edit(value);
                 }} /> : <Loading />}
-        </>
+        </div>
     )
 }

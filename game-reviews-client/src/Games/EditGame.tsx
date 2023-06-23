@@ -34,7 +34,7 @@ export default function EditGame() {
             }).catch((error) => {
                 notify({
                     type: "error",
-                    message: error.response.data
+                    message: ["Network Error"]
                 });
             });
     }, [id]);
@@ -65,8 +65,8 @@ export default function EditGame() {
         }
     }
     return (
-        <>
-            <h3>Edit Game</h3>
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Edit Game </h1>
             {game && gameToEdit ? <GameForm
                 model={game}
                 selectedGenres={gameToEdit.selectedGenres}
@@ -78,9 +78,8 @@ export default function EditGame() {
                 selectedPlatforms={gameToEdit.selectedPlatforms}
                 allPlaforms={gameToEdit.allPlatforms}
                 onSubmit={async values => {
-                    // console.log(values)
                     await editGame(values);
                 }} /> : <Loading />}
-        </>
+        </div>
     )
 }

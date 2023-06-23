@@ -47,43 +47,49 @@ export default function GenresIndex() {
     }
 
     return (
-        <>
-            <h3>Genres</h3>
-            <Link className="btn btn-primary" to="genres/create">Create Genre</Link>
-
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >All Genres </h1>
+            <Link className="btn btn-primary" style={{ marginBottom: "10px" }} to="genres/create">Create Genre</Link>
 
             <RecordsPerPageSelect onChangeRecords={amountOfRecords => {
                 setCurrentPage(1);
                 setRecordsPerPage(amountOfRecords);
             }} />
 
-            <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
-                onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)}
-            />
+            <GenericList list={genres}>
+                <div style={{ border: ' 1px solid black', borderRadius: '20px' }}>
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}>  Name</span>
+                                </th>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}> Modify</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {genres?.map(genre =>
+                                <tr key={genre.id}>
+                                    <td>
+                                        {genre.name}
+                                    </td>
+                                    <td  >
+                                        <  Link className="btn btn-success" style={{ marginRight: '25px', backgroundColor: "#7A82FF", border: "#7A82FF" }} to={`/genres/edit/${genre.id}`}>Edit</Link>
+                                        <button className="btn btn-danger" style={{ marginRight: '25px', backgroundColor: "#DC3545", border: "#DC3545" }} onClick={() => CustomConfirm(() => deleteGenre(genre.id))}>Delete</button>
 
-            <GenericList list={genres}   >
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {genres?.map(genre =>
-                            <tr key={genre.id}>
-                                <td>
-                                    {genre.name}
-                                </td>
-                                <td  >
-                                    <Link className="btn btn-success" to={`/genres/edit/${genre.id}`}>Edit</Link>
-                                    <button className="btn btn-danger"
-                                        onClick={() => CustomConfirm(() => deleteGenre(genre.id))}>Delete</button>
-                                </td>
-                            </tr>)}
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>)}
+                        </tbody>
+                    </table>
+                </div>
             </GenericList >
-        </>
+
+            <div style={{ marginTop: "20px" }}>
+                <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
+                    onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)} />
+            </div>
+        </div >
     )
 }

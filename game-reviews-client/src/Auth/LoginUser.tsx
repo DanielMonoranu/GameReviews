@@ -18,33 +18,27 @@ export default function LoginUser() {
                     saveToken(response.data);
                     update(getClaims());
                     history.push("/");
-                    //console.log(response.data);
-                    //trebe ceva aici
-                }
-                ).catch((error) => {
+                }).catch((error) => {
                     notify({
                         type: "error",
                         message: [error.response.data]
                     });
 
-                }
-                );
+                });
         }
         catch (error) {
             notify({
                 type: "error",
                 message: ["Network Error"]
             });
-
         }
-
     }
 
     return (
-        <>
-            <h1>Login</h1>
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Login </h1>
             <AutthenticationForm model={{ email: '', password: "" }}
                 onSubmit={async values => await login(values)} />
-        </>
+        </div>
     )
 }

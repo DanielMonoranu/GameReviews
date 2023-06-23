@@ -47,18 +47,21 @@ export default function UserReview(props: UserReviewProps) {
 
     }}>
         <div>
-            <Review reviews={userReviews} isParent={true} ratings={props.userRatings} userScore={props.userScore} />
             <RecordsPerPageSelect onChangeRecords={amountOfRecords => {
                 setCurrentPage(1);
                 setRecordsPerPage(amountOfRecords);
             }} />
 
+            <Review reviews={userReviews} isParent={true} ratings={props.userRatings} userScore={props.userScore} maxWidth="630px" />
+
             <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
                 onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)} />
+
+
         </div>
         <>
         </>
-    </RefreshContext.Provider>
+    </RefreshContext.Provider >
     )
 }
 

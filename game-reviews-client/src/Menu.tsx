@@ -1,10 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import Authorized from "./Auth/Authorized";
 import { logout } from "./Auth/JWTHandler";
 import { useContext } from "react";
 import AuthenticationContext from "./Auth/AuthenticationContext";
 
 export default function Menu() {
+    const history = useHistory();
     const { update, claims } = useContext(AuthenticationContext);
 
     const getUserEmail = (): string => {
@@ -26,9 +27,14 @@ export default function Menu() {
     }
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container-fluid">
-                <NavLink className="navbar-brand" to="/">Game Reviews</NavLink>
+                <NavLink className="navbar-brand" to="/">
+                    <img src="https://gamereviewsapi.blob.core.windows.net/gameresources/SRColor.png" style={{ width: '30px', height: '30px' }} ></img>
+                    <span>
+                        &nbsp; Starry Reviews
+                    </span>
+                </NavLink>
                 <div className="collapse navbar-collapse" style={{ display: 'flex', justifyContent: "space-between" }}>
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
@@ -59,8 +65,6 @@ export default function Menu() {
                                         Platforms
                                     </NavLink>
                                 </li>
-
-
                                 <li className="nav-item">
                                     <NavLink className="nav-link" to="/users">
                                         Users
@@ -75,25 +79,20 @@ export default function Menu() {
                         </li>}
 
                     </ul>
-
-
-
                     <div className="d-flex">
                         <Authorized authorized={<>
-                            {/* <span className="nav-link">Welcome, {localStorage.getItem('name')}</span> */}
-                            <Link className="nav-link" to="/changeCredentials" >Welcome,  {getUserEmail()}</Link>
-                            {/* modify profile picture */}
-                            <img src={getProfilePicture()} alt="profile" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
-                            <button className="nav-link btn btn-link" onClick={() => {
+                            <Link className="nav-link" to="/changeCredentials" >Welcome,  {getUserEmail()}     <img src={getProfilePicture()} alt="profile" style={{ width: '30px', height: '30px', borderRadius: '50%' }} /></Link>
+                            <button className="nav-link btn btn-dark" onClick={() => {
                                 logout();
                                 update([]);
+                                history.push('/');
                             }}
                             >Log out</button>
 
                         </>}
                             notAuthorized={<>
                                 <Link to="/register"
-                                    className="nav-link btn btn-link">Register</Link>
+                                    className="nav-link btn-link ">Register</Link>
                                 <Link to="/login"
                                     className="nav-link btn btn-link">Login</Link>
                             </>} />

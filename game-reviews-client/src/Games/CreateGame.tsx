@@ -36,11 +36,6 @@ export default function CreateGame() {
 
     const createGame = async (game: gameCreationDTO) => {
         const formData = convertGameToFormData(game);
-
-        // for (var pair of formData.entries()) {
-        //     console.log(pair[0] + ', ' + pair[1]);
-        // }
-
         await axios({
             method: "post",
             url: urlGames,
@@ -57,8 +52,8 @@ export default function CreateGame() {
         });
     }
 
-    return (<>
-        <h3>Create Game</h3>
+    return (<div className="container">
+        <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Create Game </h1>
         {loading ? <Loading /> :
             <GameForm
                 model={{ name: '', releaseDate: new Date(), trailer: '', multiplayer: false }}
@@ -71,5 +66,5 @@ export default function CreateGame() {
                 onSubmit={async values => {
                     await createGame(values);
                 }} />}
-    </>)
+    </div>)
 }

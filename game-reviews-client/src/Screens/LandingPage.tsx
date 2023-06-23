@@ -1,12 +1,10 @@
-import { IncomingMessage } from "http";
-import { useEffect, useState } from "react";
-import { gameDTO, landingPageDTO, } from "../Games/games.model"
-import GamesList from "../Games/GamesList"
-import SingleGame from "../Games/SingleGame"
 import axios, { AxiosResponse } from "axios";
-import { urlGames } from "../endpoints";
-import Authorized from "../Auth/Authorized";
+import { useEffect, useState } from "react";
+import GamesList from "../Games/GamesList";
+import { landingPageDTO } from "../Games/games.model";
 import { RefreshContext } from "../Utilities/RefreshContext";
+import { urlGames } from "../endpoints";
+import notify from "../Utilities/ToastErrors";
 
 export default function LandingPage() {
     const [games, setGames] = useState<landingPageDTO>({});
@@ -15,20 +13,47 @@ export default function LandingPage() {
         loadData();
     }, []);
 
-    const loadData = () => {
-        axios.get(`${urlGames}/GetFrontPageGames`).then((response: AxiosResponse<landingPageDTO>) => {
+    const loadData = async () => {
+        await axios.get(`${urlGames}/GetFrontPageGames`).then((response: AxiosResponse<landingPageDTO>) => {
             setGames(response.data);
-        })
+        }).catch((error) => {
+            notify({
+                type: "error",
+                message: ["Network Error"]
+            });
+
+        });
+
+
     }
 
     return (<RefreshContext.Provider value={() => loadData()}>
-        <div>
-            Released:
+
+
+        <div style={{
+            backgroundImage: "url(https://gamereviewsapi.blob.core.windows.net/gameresources/bggg.jpg)",
+            backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '320px', display: 'flex', alignItems: 'center'
+        }}>
+
+
+            <div style={{ margin: 'auto', textAlign: 'center' }}>
+
+                <h1 className="display-1 text-center"
+                    style={{ color: 'wheat', fontFamily: 'Helvetica', fontWeight: "bold", cursor: "default" }}>
+                    <img src="https://gamereviewsapi.blob.core.windows.net/gameresources/SRBej.png" style={{ width: '100px', height: '100px' }}></img>&nbsp;STARRY REVIEWS  </h1>
+
+            </div>
+
+
         </div>
-        <GamesList games={games.releasedGames} />
-        <div>
-            To be released:
+
+        <div className="container">
+            <h2 style={{ marginTop: '10px', marginBottom: '10px' }}> New Releases</h2>
+            <GamesList games={games.releasedGames} />
         </div>
-        <GamesList games={games.upcomingGames} />
+        <div className="container">
+            <h2 style={{ marginTop: '10px', marginBottom: '10px' }}>Upcoming Releases</h2>
+            <GamesList games={games.upcomingGames} />
+        </div>
     </RefreshContext.Provider >)
 }

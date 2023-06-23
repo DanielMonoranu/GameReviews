@@ -15,16 +15,19 @@ export default function AutthenticationForm(props: authenticationFormProps) {
             })}
         >
             {formikProps => (
+
                 <Form>
                     <TextField field={'email'} labelName={'Email'} />
                     <TextField field={'password'} labelName={'Password'} type='password' />
                     {props.isRegister && <ImageField field={'profilePicture'} displayName={'Profile Picture'} />}
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                    {/* add disabled to button! */}
-                    <Link className='btn btn-secondary' to='/'>Cancel</Link>
+                    <button type="submit" className="btn btn-primary " style={{ backgroundColor: "#7A82FF", border: "#7A82FF" }} >Submit</button>
+
+                    <Link className='btn btn-secondary' to='/' style={{ backgroundColor: "grey", border: "grey", }} >Cancel</Link>
+
                 </Form>
-            )}
-        </Formik>
+            )
+            }
+        </Formik >
     )
 
 }

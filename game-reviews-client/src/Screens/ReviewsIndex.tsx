@@ -22,7 +22,8 @@ export default function ReviewsIndex() {
     const [hasRated, setHasRated] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
     const [refreshState, setRefreshState] = useState<boolean>(false);
-
+    const [criticScore, setCriticScore] = useState<number>(0);
+    const [usersScore, setUsersScore] = useState<number>(0);
     const getUserEmail = (): string => {
 
         return claims.filter(claim => claim.name === 'email')[0]?.value;
@@ -40,6 +41,8 @@ export default function ReviewsIndex() {
 
     const loadGameData = async () => {
         await axios.get(`${urlGames}/${id}`).then((response) => {
+            setUsersScore(response.data.averageScoreUsers);
+            setCriticScore(response.data.averageScoreCritics);
             setUserScore(response.data.userScore);
         }).catch(() => {
             notify({
@@ -116,25 +119,41 @@ export default function ReviewsIndex() {
         <ReviewSecondContext.Provider value={() => {
             loadDataRatings(); loadGameData(); setHasRated(false); setRefreshState(false);
         }}>
-            < div style={{ display: 'flex', justifyContent: 'space-between' }} >
-                <h1>Critics Reviews</h1>
-                <h1>Users Reviews</h1>
+            < div className="container" style={{ display: 'flex', justifyContent: 'space-around' }} >
+
+
+                <h1 style={{ marginTop: '15px', marginBottom: '10px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Critics Reviews &nbsp;
+                    <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Score: &nbsp;
+                        {criticScore >= 0 ? < span  >
+                            {criticScore}  </span> : <span>Not yet rated</span>}</h1>
+                </h1>
+
+                <h1 style={{ marginTop: '15px', marginBottom: '10px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Users Reviews &nbsp;
+                    <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Score: &nbsp;
+                        {usersScore >= 0 ? < span  >
+                            {usersScore}  </span> : <span>Not yet rated</span>}</h1>
+                </h1>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="container" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
                 <CriticReview criticRatings={criticRatings} gameId={id} userScore={userScore} refreshState={refreshState} />
                 <UserReview userRatings={userRatings} gameId={id} userScore={userScore} refreshState={refreshState} />
             </div>
 
-            {ifAdmin() !== true && hasRated === false &&
-                <div>
-                    <h2>Write your review:</h2>
+            {
+                ifAdmin() !== true && hasRated === false &&
+                <div className="container" style={{ width: 'auto', }}>
+                    <h2 style={{ marginTop: '20px', marginBottom: '20px' }}>Write your review:</h2>
+
                     <QuillReview readonly={false} parentReview={true} placeholder="Write your review"
                         onEnter={(value) => {
                             postReviews(value);
+                        }}
+                    />
+                    <div style={{ marginBottom: '40px', marginTop: "10px", display: 'flex' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '20px' }} >  Score:  &nbsp; </span> <Ratings maxValue={10} onChange={(value) => setUserScore(value)} selectedValue={userScore} />
+                    </div>
 
-                        }} />
-                    <Ratings maxValue={10} onChange={(value) => setUserScore(value)} selectedValue={userScore} />
                 </div>
             }
 

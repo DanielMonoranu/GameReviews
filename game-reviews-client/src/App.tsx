@@ -12,6 +12,9 @@ import AuthenticationContext from './Auth/AuthenticationContext';
 import { getClaims } from './Auth/JWTHandler';
 import configureInterceptor from './Utilities/HttpInterceptors';
 
+import css from './All.module.css';
+import { cyan } from '@mui/material/colors';
+
 configureValidations();
 configureInterceptor();
 
@@ -45,25 +48,44 @@ function App() {
 
       <AuthenticationContext.Provider value={{ claims, update: setClaims }}>
 
-        <ToastContainer />
-        <Menu />
-        <div className='container'>
-          <Switch>
-            {routes.map(route =>
-              <Route key={route.path} path={route.path} exact={route.exact} >
-                {route.isAdmin && !isAdmin() ? <h1>Not authorized to see this page</h1> :
-                  route.isAuthenticated && isAuthenticated() ? <h1>Not authorized to see this page</h1> :
-                    route.isUser &&
-                      !isUser() && !isAdmin() ? <h1>Not authorized to see this page</h1> :
-                      <route.component />}
-              </Route>
-            )}
-          </Switch>
-        </div>
-        <footer className='bd-footer py-5 mt-5 bg-light'>
-          <div className='container'>Game Reviews {new Date().getFullYear().toString()}</div>
-        </footer>
 
+        <div className={css.background}>
+          <ToastContainer />
+          <Menu />
+
+          {/* <div style={{ color: ' white ' }}  > */}
+          <div>
+
+            <Switch>
+              {routes.map(route =>
+                <Route key={route.path} path={route.path} exact={route.exact} >
+                  {route.isAdmin && !isAdmin() ?
+                    <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                      <h1>Not authorized to see this page</h1>
+                    </div>
+                    :
+                    route.isAuthenticated && isAuthenticated() ?
+                      <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                        <h1>Not authorized to see this page</h1>
+                      </div> :
+
+                      route.isUser &&
+                        !isUser() && !isAdmin() ?
+                        <div style={{ textAlign: 'center', marginTop: '30px' }}>
+                          <h1>Not authorized to see this page</h1>
+                        </div>
+                        :
+                        <route.component />}
+                </Route>
+              )}
+            </Switch>
+          </div>
+
+
+          <footer style={{ marginTop: 'auto', borderTop: '3px' }} className='bd-footer navbar-expand-lg py-2 bg-dark'  >
+            <div className='container-fluid text-white'>Starry Reviews {new Date().getFullYear().toString()}</div>
+          </footer>
+        </div>
       </AuthenticationContext.Provider>
     </BrowserRouter >
   );

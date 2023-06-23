@@ -173,11 +173,7 @@ namespace GameReviews.API.Controllers
             {
                 return BadRequest("Incorrect Password");
             }
-
         }
-
-
-
 
         [HttpGet("")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
@@ -242,7 +238,6 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult> Delete([FromBody] string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-
             var reviewToDelete = await _context.Reviews.Where(x => x.UserId == id).Select(r => r.Id).ToListAsync();
             foreach (var review in reviewToDelete)
             {
@@ -262,6 +257,23 @@ namespace GameReviews.API.Controllers
             return Ok();
         }
 
+        [HttpDelete( )]
+        public async Task<ActionResult> DeleteAccount([FromBody] UserCredentialsDTO userCredentials)
+        {
+            var result = await _signInManager.PasswordSignInAsync(userCredentials.Email,
+               userCredentials.Password, isPersistent: false, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByEmailAsync(userCredentials.Email);
+                await Delete(user.Id);
+            return Ok();
+            }
+            else
+            {
+                return BadRequest("Incorrect Login");
+            }
+        }
+
         [HttpPost("sendEmail")]
         public async Task<ActionResult> SendEmail([FromForm] SendEmailDTO sendEmailDTO)
         {
@@ -269,11 +281,6 @@ namespace GameReviews.API.Controllers
             var response = await _emailSender.SendEmailAsync(sendEmailDTO.Email, sendEmailDTO.Text, admins, sendEmailDTO.Image);
             return Ok(response);
         }
-
-
-
-
-
         private AuthenticationResponseDTO BuildToken(string email, string? profilePicture, Claim? claim = null)
         {
             var claims = new List<Claim>()

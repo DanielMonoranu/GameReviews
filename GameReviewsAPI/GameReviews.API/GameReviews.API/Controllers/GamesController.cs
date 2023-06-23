@@ -46,8 +46,11 @@ namespace GameReviews.API.Controllers
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (game == null) { return NotFound(); }
 
-            var averageScoreCritics = 0.0;
-            var averageScoreUsers = 0.0;
+            var averageScoreCritics = -1.0;
+            var averageScoreUsers = -1.0;
+            var userScoreCount = 0;
+            var criticScoreCount = 0;
+
             var userScore = 0;
             var userType = "NotLoggedIn";
 
@@ -57,12 +60,16 @@ namespace GameReviews.API.Controllers
                 {
                     averageScoreCritics = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "Critic")
                         .AverageAsync(x => x.Score);
+                    criticScoreCount = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "Critic").CountAsync();
+
                 }
                 catch { }
                 try
                 {
                     averageScoreUsers = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "User")
                     .AverageAsync(x => x.Score);
+                    userScoreCount = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "User").CountAsync();
+
                 }
                 catch { }
             }
@@ -83,7 +90,9 @@ namespace GameReviews.API.Controllers
             gameDto.AverageScoreUsers = averageScoreUsers;
             gameDto.UserScore = userScore;
             gameDto.UserType = userType;
-            return gameDto;
+            gameDto.UserScoreCount = userScoreCount;
+            gameDto.CriticScoreCount = criticScoreCount;
+            return Ok(gameDto);
         }
 
         [HttpGet("GetAllGamesAttributes")]
@@ -105,7 +114,7 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult<FrontPageGamesDTO>> GetFrontPageGames()
         {
             var today = DateTime.Now;
-            var entries = 6;
+            var entries = 5;
             var upcomingGames = await _context.Games.Where(x => x.ReleaseDate > today)
                 .OrderBy(x => x.ReleaseDate).Take(entries).ToListAsync();
 
@@ -122,10 +131,12 @@ namespace GameReviews.API.Controllers
         [HttpGet("GetGameToEdit/{id:int}")]
         public async Task<ActionResult<GameToEditDTO>> GetGameToEdit(int id)
         {
-            var gameToEditActionResult = await Get(id);
-            if (gameToEditActionResult.Result is NotFoundResult) { return NotFound(); }
-            var gameToEdit = gameToEditActionResult.Value;
-
+            GameDTO gameToEdit = new GameDTO();
+            ActionResult<GameDTO> gameToEditActionResult = await Get(id);
+            if (gameToEditActionResult.Result is OkObjectResult okObjectResult)
+            {
+                gameToEdit = (GameDTO)okObjectResult.Value;
+            }
             var genresSelectedIds = gameToEdit.Genres.Select(x => x.Id).ToList();
             var allGenres = await _context.Genres.ToListAsync();
             var allGenresDto = _mapper.Map<List<GenreDTO>>(allGenres);
@@ -248,7 +259,23 @@ namespace GameReviews.API.Controllers
             await HttpContext.InsertParametersPaginationInHeader(gamesQueryable);
             var games = await gamesQueryable.OrderBy(x => x.Name).Paginate(filterGamesDTO.PaginationDto).ToListAsync();
 
-            return _mapper.Map<List<GameDTO>>(games);
+            if (filterGamesDTO.OnlySearch == true)
+            {
+                return _mapper.Map<List<GameDTO>>(games);
+            }
+
+            var finalGames = new List<GameDTO>();
+            foreach (var game in games)
+            {
+                ActionResult<GameDTO> actionResult = await Get(game.Id);
+                if (actionResult.Result is OkObjectResult okObjectResult)
+                {
+                    GameDTO gameItem = (GameDTO)okObjectResult.Value;
+                    finalGames.Add(gameItem);
+                }
+            }
+            return finalGames;
+
 
         }
 

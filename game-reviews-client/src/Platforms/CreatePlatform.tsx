@@ -29,13 +29,13 @@ export default function CreatePlatform() {
         }
 
     }
-    return (<>
-        <h3>Create a Platform</h3>
+    return (<div className="container">
+        <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Create Platform </h1>
         <PlatformForm
             model={{ name: '' }}
             onSubmit={async value => {
                 await create(value);
             }} />
 
-    </>)
+    </div>)
 }

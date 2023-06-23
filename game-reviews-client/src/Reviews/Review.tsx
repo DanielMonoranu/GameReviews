@@ -1,5 +1,6 @@
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle'
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { urlRatings, urlReviews } from "../endpoints"
@@ -111,7 +112,6 @@ export default function Review(props: ReviewProps) {
                 return axios.delete(`${urlRatings}/${ratingId}`);
             }
         }).then(() => {
-
             notify({ type: "success", message: ["Deleted succesfully"] });
             refreshPage();
         }).catch((error) => {
@@ -126,59 +126,60 @@ export default function Review(props: ReviewProps) {
     return < >
         <div >
             {props.reviews?.map((review, index) =>
-            (<div
-                style={{ border: '1px solid black', padding: '10px' }} key={review.id}>
+            (<div style={{
+                border: '1.5px solid black',
+                marginBottom: '20px',
+                padding: '10px',
+                width: props.maxWidth,
+                borderRadius: '10px',
 
-                <QuillReview readonly={true} text={review.reviewText === '' ? "Empty comment" : review.reviewText} />
-
-                <div>Info: {review.user.type} {review.user.email}   <img src={review.user.profilePicture} alt="profile"
-                    style={{ width: '30px', height: '30px', borderRadius: '50%' }} /></div>
-
-                {getUserRole() !== "admin" && <button className="btn btn-primary m-3" onClick={() => {
-                    setSelectedReviewsId([...selectedReviewsId, review.id]);
-                }}>Add comment</button>}
+            }} key={review.id}>
 
 
-                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => { setCanEdit(true) }}>Edit</button>}
+                <img src={review.user.profilePicture} alt="profile"
+                    style={{ width: '30px', height: '30px', borderRadius: '50%', marginBottom: '6px' }} /> {review.user.email} &nbsp;
 
-                {getUserEmail() === review.user.email && <button className="btn btn-danger m-3" onClick={() => {
-                    CustomConfirm(() =>
-                        deleteReviews(review))
-                }}>Delete</button>}
-
-                {/* FOR EDIT */}
-                {canEdit && getUserEmail() === review.user.email && <>
-                    < QuillReview text={review.reviewText} onEnter={(value) => {
-                        editReviews(value, review);
-                        setCanEdit(false);
-                    }} />
-                    <div>
-                        <button className="btn btn-danger m-1" onClick={() => { setCanEdit(false) }}>Cancel</button>
-                    </div>
-                    <h1>{props.userScore}</h1>
-                    {review.parentReviewId === null && <Ratings maxValue={10} onChange={(value) => setUserScore(value)} selectedValue={props.userScore} />}
+                {props.ratings && <>
+                    <Ratings maxValue={10} selectedValue={props.ratings?.find(rating => rating.user.email === review.user.email)?.score!}
+                        readonly={true} />
                 </>}
 
+                <QuillReview readonly={true} text={review.reviewText === '' ? "Empty" : review.reviewText} />
+
+                <div style={{ marginTop: '10px' }}>
+                    {getUserRole() !== "admin" && <button className="btn btn-primary mr-2 " style={{ backgroundColor: "#7A82FF", border: "#7A82FF" }} onClick={() => {
+                        setSelectedReviewsId([...selectedReviewsId, review.id]);
+                    }}>Add comment</button>}
+
+                    {getUserEmail() === review.user.email && <button className="btn btn-warning ms-2 " onClick={() => { setCanEdit(true) }}>Edit</button>}
+
+                    {getUserEmail() === review.user.email && <button className="btn btn-danger ms-2 " onClick={() => {
+                        CustomConfirm(() =>
+                            deleteReviews(review))
+                    }}>Delete</button>}
+                </div>
+
                 {/* FOR COMMENTS */}
-                {selectedReviewsId.includes(review.id) && <div className="m-3">
+                {selectedReviewsId.includes(review.id) && <div style={{ marginTop: '15px' }} >
                     <QuillReview placeholder='Write your comment' onEnter={(value) => {
                         postComments(value, review);
                         setSelectedReviewsId(selectedReviewsId.filter((id) => id !== review.id));
-                    }} />
+                    }}
+                        onCancel={() => {
+                            setSelectedReviewsId(selectedReviewsId.filter((id) => id !== review.id));
+                        }}
+                    />
 
-                    <button className="btn btn-danger m-1" onClick={() => {
-                        setSelectedReviewsId(selectedReviewsId.filter((id) => id !== review.id));
-                    }}>Cancel</button>
                 </div>}
 
-
                 {review.childReviews && review.childReviews.length > 0 &&
-                    <div>
+                    <div style={{ marginTop: '10px' }}>
+
                         <button style={{
                             backgroundColor: "transparent",
                             border: "none",
-                            cursor: "pointer",
-                            padding: '0'
+                            cursor: "pointer", display: 'flex', alignItems: 'center',
+                            marginTop: '10px'
                         }}
                             onClick={() => {
                                 {
@@ -191,19 +192,32 @@ export default function Review(props: ReviewProps) {
                                     }
                                 }
                             }}>
-                            <ArrowDropDownCircleIcon />
-                            {/* <ArrowCircleUpIcon />   de modificat aici */}
-                        </button>
+                            {showComments === false && <ExpandCircleDownIcon style={{ color: "#7A82FF" }} />}
+                            {showComments === true && <ExpandCircleDownIcon style={{ color: "#7A82FF", transform: 'scaleY(-1)' }} />}
 
+                            <span style={{ fontWeight: 'bold', fontSize: '20px', marginLeft: '5px' }}>  Read Comments</span>
+                        </button>
                         {showCommentsReview.includes(review.id) && <div>
                             <Review reviews={review.childReviews} />
                         </div>}
                     </div>}
-                {props.ratings && <>
-                    <h2>{props.ratings?.find(rating => rating.user.email === review.user.email)?.score}</h2>
-                    <Ratings maxValue={10} selectedValue={props.ratings?.find(rating => rating.user.email === review.user.email)?.score!}
-                        readonly={true} />
+
+                {/* FOR EDIT */}
+                {canEdit && getUserEmail() === review.user.email && <>
+                    < QuillReview text={review.reviewText} onEnter={(value) => {
+                        editReviews(value, review);
+                        setCanEdit(false);
+                    }}
+                        onCancel={() => { setCanEdit(false) }} />
+                    {review.parentReviewId === null && <Ratings maxValue={10} onChange={(value) => setUserScore(value)} selectedValue={props.userScore} />}
                 </>}
+
+
+
+
+
+
+
 
 
             </div>
@@ -219,6 +233,7 @@ interface ReviewProps {
     isParent?: boolean;
     ratings?: RatingDTO[];
     userScore: number;
+    maxWidth?: string;
 }
 Review.defaultProps = {
     userScore: 0

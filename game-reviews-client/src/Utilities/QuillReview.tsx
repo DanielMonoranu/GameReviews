@@ -24,14 +24,22 @@ export default function QuillReview(props: QuillReviewProps) {
                 placeholder={props.placeholder}
                 readOnly={props.readonly}
                 modules={props.readonly ? modules : {}}
+                style={{ backgroundColor: "beige" }}
             />
-            {props.readonly !== true && <button className="btn btn-info m-1"
-                onClick={() =>
-                    props.onEnter && props.onEnter(text)
-                }    >Post</button>}
-            {props.parentReview === true && <button className="btn btn-danger m-1" onClick={() => { setText('') }} >Clear</button>}
-
-
+            {props.readonly !== true &&
+                <>
+                    <button className="btn btn-primary m-1" style={{ backgroundColor: "#7A82FF", border: "#7A82FF" }}
+                        onClick={() =>
+                            props.onEnter && props.onEnter(text)
+                        }    >Post</button>
+                    <button className="btn btn-danger m-1" style={{ backgroundColor: "#DC3545", border: "#DC3545" }}
+                        onClick={() => {
+                            props.onCancel && props.onCancel()
+                            setText('')
+                        }
+                        }    >Cancel</button>
+                </>
+            }
         </div >
     );
 };
@@ -42,4 +50,6 @@ interface QuillReviewProps {
     readonly?: boolean;
     text?: string;
     parentReview?: boolean;
+    isComment?: boolean;
+    onCancel?: () => void;
 }

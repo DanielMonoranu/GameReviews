@@ -22,7 +22,7 @@ export default function SingleGame(props: gameDTO) {
     return (
         <div className={css.div}>
             <Link to={buildLink()}>
-                <img alt="Poster" src={props.poster} />
+                <img style={{ borderRadius: '10px' }} alt="Poster" src={props.poster} />
             </Link>
             <p>
                 <Link to={buildLink()}>
@@ -33,11 +33,11 @@ export default function SingleGame(props: gameDTO) {
                 role="admin"
                 authorized={<>
                     <div >
-                        <Link style={{ marginRight: '0.5rem' }}
-                            className="btn btn-info"
+                        <Link style={{ marginRight: '0.5rem', marginBottom: '20px' }}
+                            className="btn btn-primary"
                             to={`/games/edit/${props.id}`}>
                             Edit</Link>
-                        <button className="btn btn-danger"
+                        <button className="btn btn-danger" style={{ marginRight: '0.5rem', marginBottom: '20px' }}
                             onClick={() => CustomConfirm(() => deleteGame())}
                         >Delete</button>
                     </div>

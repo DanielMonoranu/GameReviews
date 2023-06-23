@@ -12,7 +12,6 @@ export function saveToken(authenticationData: authenticationResponseDTO) {
 
 export function getClaims(): claim[] {
     const response: claim[] = [];
-
     const token = localStorage.getItem(tokenKey);
     if (!token) return [];
     const expirationDate = new Date(localStorage.getItem(expirationKey)!);
@@ -30,6 +29,7 @@ export function getClaims(): claim[] {
 export function logout() {
     localStorage.removeItem(tokenKey);
     localStorage.removeItem(expirationKey);
+
 }
 
 export function getToken() {

@@ -28,13 +28,13 @@ export default function CreateDeveloper() {
         }
 
     }
-    return (<>
-        <h3>Create Developer</h3>
+    return (<div className="container">
+        <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Create Developer </h1>
         <DeveloperForm
             model={{ name: '' }}
             onSubmit={async value => {
                 await create(value);
             }} />
 
-    </>)
+    </div>)
 }

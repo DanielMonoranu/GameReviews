@@ -15,7 +15,8 @@
         public double AverageScoreCritics { get; set; }
         public double AverageScoreUsers { get; set; }
         public int UserScore { get; set; }
-
+        public int UserScoreCount { get; set; }
+        public int CriticScoreCount { get; set; }
         public string UserType { get; set; }
     }
 }

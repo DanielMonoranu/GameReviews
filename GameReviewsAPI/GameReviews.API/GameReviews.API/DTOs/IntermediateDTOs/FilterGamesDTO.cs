@@ -16,6 +16,7 @@
         public bool UpcomingRelease { get; set; }
 
         public bool Released { get; set; }
+        public bool OnlySearch { get; set; } 
 
 
     }

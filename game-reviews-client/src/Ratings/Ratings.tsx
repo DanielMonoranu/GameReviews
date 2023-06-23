@@ -49,7 +49,7 @@ export default function Ratings(props: ratingProps) {
                     onClick={props.readonly !== true ? () => handleClick(index + 1) : undefined}
                 />
             )}
-            <span>{selectedValue}</span>
+            <span style={{ fontWeight: 'bold', fontSize: '20px' }}>   &nbsp;{selectedValue} </span>
         </ >
     )
 }

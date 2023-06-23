@@ -87,6 +87,7 @@ export default function UsersIndex() {
             });
         }
     }
+
     const deleteAccount = async (id: string) => {
         try {
             await axios.post(`${urlAccounts}/deleteAccount`, JSON.stringify(id), { headers: { 'Content-Type': 'application/json' } })
@@ -100,69 +101,84 @@ export default function UsersIndex() {
         }
     }
     return (
-        <>
-            <h3>Users</h3>
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >All Users </h1>
             <RecordsPerPageSelect onChangeRecords={amountOfRecords => {
                 setCurrentPage(1);
                 setRecordsPerPage(amountOfRecords);
             }} />
 
-            <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
-                onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)}
-            />
             <GenericList list={users}   >
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Email </th>
-                            <th>Type</th>
-                            <th>Modify</th>
-                            <th> Admin state</th>
-                            <th> Delete</th>
+                <div style={{ border: ' 1px solid black', borderRadius: '20px' }}>
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}>  Email</span>
+                                </th>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}>  Type</span>
+                                </th>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}>  Modify</span>
+                                </th>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}>  Admin state</span>
+                                </th>
+                                <th>
+                                    <span style={{ color: "#7A82FF" }}>  Remove</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users?.map(user =>
+                                <tr key={user.id}>
+                                    <td>
+                                        <div style={{ display: 'flex' }}>
+                                            <img src={user.profilePicture} alt="user" style={{ width: "3rem", marginLeft: "1rem" }} />
+                                            {user.email}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {user.type}
+                                    </td>
+                                    <td  >
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users?.map(user =>
-                            <tr key={user.id}>
-                                <td>
-                                    <img src={user.profilePicture} alt="user" style={{ width: "3rem", marginLeft: "1rem" }} />
-                                    {user.email}
-                                </td>
-                                <td>
-                                    {user.type}
-                                </td>
-                                <td  >
-                                    {user.type !== 'Critic' && user.type !== 'Admin' &&
-                                        <button className="btn btn-success" style={{ marginRight: "1rem" }}
-                                            onClick={() => CustomConfirm(() => makeCritic(user.id), `Do you wish to make ${user.email} a critic?`, `Do it`)}  >Make Critic</button>}
-                                    {user.type === "Critic" &&
-                                        <button className="btn btn-danger"
-                                            onClick={() => CustomConfirm(() => removeCritic(user.id),
-                                                `Do you wish to remove ${user.email} as a critic?`, `Do it`)}>Remove Critic </button>}
-                                </td>
-                                <td  >
-                                    {user.type !== 'Admin' &&
-                                        <button className="btn btn-success" style={{ marginRight: "1rem" }}
-                                            onClick={() => CustomConfirm(() => makeAdmin(user.id), `Do you wish to make ${user.email} an admin?`, `Do it`)}  >Make Admin</button>}
-                                    {user.type === "Admin" &&
-                                        <button className="btn btn-danger"
-                                            onClick={() => CustomConfirm(() => removeAdmin(user.id),
-                                                `Do you wish to remove ${user.email} as an admin?`, `Do it`)}>Remove Admin</button>}
-                                </td>
-                                <td>
-                                    <button className="btn btn-danger"
-                                        onClick={() => CustomConfirm(() => deleteAccount(user.id),
-                                            `Do you wish delete ${user.email}'s account?`, `Do it`)}>Delete Account</button>
-                                </td>
+                                        {user.type !== 'Critic' && user.type !== 'Admin' &&
+                                            <button className="btn btn-success" style={{ marginRight: '25px', backgroundColor: "#7A82FF", border: "#7A82FF" }}
+                                                onClick={() => CustomConfirm(() => makeCritic(user.id), `Do you wish to make ${user.email} a critic?`, `Do it`)}  >Make Critic</button>}
+                                        {user.type === "Critic" &&
+                                            <button className="btn btn-danger" style={{ marginRight: '25px', backgroundColor: "#DC3545", border: "#DC3545" }}
+                                                onClick={() => CustomConfirm(() => removeCritic(user.id),
+                                                    `Do you wish to remove ${user.email} as a critic?`, `Do it`)}>Remove Critic </button>}
+                                    </td>
+                                    <td  >
+                                        {user.type !== 'Admin' &&
+                                            <button className="btn btn-success" style={{ marginRight: '25px', backgroundColor: "#7A82FF", border: "#7A82FF" }}
+                                                onClick={() => CustomConfirm(() => makeAdmin(user.id), `Do you wish to make ${user.email} an admin?`, `Do it`)}  >Make Admin</button>}
+                                        {user.type === "Admin" &&
+                                            <button className="btn btn-danger" style={{ marginRight: '25px', backgroundColor: "#DC3545", border: "#DC3545" }}
+                                                onClick={() => CustomConfirm(() => removeAdmin(user.id),
+                                                    `Do you wish to remove ${user.email} as an admin?`, `Do it`)}>Remove Admin</button>}
+                                    </td>
+                                    <td>
+                                        <button className="btn btn-danger" style={{ marginRight: '25px', backgroundColor: "#DC3545", border: "#DC3545" }}
+                                            onClick={() => CustomConfirm(() => deleteAccount(user.id),
+                                                `Do you wish delete ${user.email}'s account?`, `Do it`)}>Delete Account</button>
+                                    </td>
 
-                            </tr>)}
-                    </tbody>
-                </table>
+                                </tr>)}
+                        </tbody>
+                    </table>
+                </div>
             </GenericList >
 
-
-        </>
+            <div style={{ marginTop: "20px" }}>
+                <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
+                    onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)}
+                />
+            </div>
+        </div >
 
     )
 }

@@ -9,6 +9,7 @@ import { developerDTO } from "../Developers/developers.model";
 import { platformDTO } from "../Platforms/platforms.model";
 import { useHistory, useLocation } from "react-router-dom";
 import Pagination from "../Utilities/Pagination";
+import { relative } from "path";
 
 export default function FilterGames() {
     const history = useHistory();
@@ -21,6 +22,7 @@ export default function FilterGames() {
     const query = new URLSearchParams(useLocation().search);  ///!! ce e asta
 
     const initialValues: filterGamesValues = {
+        onlySearch: true,
         name: '',
         page: 1,
         recordsPerPage: 10,
@@ -111,9 +113,10 @@ export default function FilterGames() {
         history.push(`/games/filter?${query.join('&')}`);
     }
 
-    //////////////////////////trebe adaugat si multiplayer
     return (<>
-        <h3>Filter Games</h3>
+        <div className="container" >
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Search Games  </h1>
+        </div>
         <Formik initialValues={initialValues}
             onSubmit={(values) => {
                 values.page = 1;
@@ -121,7 +124,7 @@ export default function FilterGames() {
             }
             }>
             {(formikProps) => (
-                <>
+                <div className="container">
                     <Form>
                         <div className="row gx-3 align-items-center mb-3">
                             <div className="col-auto">
@@ -158,24 +161,33 @@ export default function FilterGames() {
                                 </div>
                             </div>
                             <div className="col-auto">
-                                <button className="btn btn-primary" onClick={() => formikProps.submitForm}>Filter</button>
-                                <button className="btn btn-danger ms-3" onClick={() => {
+                                <div className="form-check">
+                                    <Field className="form-check-input" id="multiplayer" name="multiplayer" type="checkbox" />
+                                    <label className="form-check-label" htmlFor="multiplayer">Multiplayer</label>
+                                </div>
+                            </div>
+                            <div className="col-auto">
+                                <button className="btn btn-primary mt-3" style={{ backgroundColor: "#7A82FF", border: "#7A82FF" }} onClick={() => formikProps.submitForm}>Filter</button>
+                                <button className="btn btn-danger mt-3 ms-4" style={{ backgroundColor: "#DC3545", border: "#DC3545" }} onClick={() => {
                                     searchGames(initialValues);
                                     formikProps.setValues(initialValues)
-                                }}>Cancel</button>
+                                }}>Clear</button>
                             </div>
                         </div>
                     </Form>
                     <GamesList games={games} />
-                    <Pagination
-                        currentPage={formikProps.values.page}
-                        totalPages={totalAmountOfPages}
+                    <div style={{ position: 'relative', marginTop: '20px', marginBottom: '20px' }} >
 
-                        onPageChange={newPage => {
-                            formikProps.values.page = newPage;
-                            searchGames(formikProps.values);
-                        }} />
-                </>
+                        <Pagination
+                            currentPage={formikProps.values.page}
+                            totalPages={totalAmountOfPages}
+
+                            onPageChange={newPage => {
+                                formikProps.values.page = newPage;
+                                searchGames(formikProps.values);
+                            }} />
+                    </div>
+                </div>
             )}
         </Formik >
     </>)
@@ -191,4 +203,5 @@ interface filterGamesValues {
     upcomingRelease: boolean;
     released: boolean;
     multiplayer: boolean;
+    onlySearch: boolean;
 }

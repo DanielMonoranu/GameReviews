@@ -15,8 +15,8 @@ export default function DeveloperForm(props: developerFormProps) {
             {(formikProps) => (
                 <Form>
                     <TextField field="name" labelName="Name"></TextField>
-                    <button disabled={formikProps.isSubmitting} type="submit" className="btn btn-primary" >Save Changes</button>
-                    <Link className="btn btn-secondary" to="/developers"  >Cancel</Link>
+                    <button disabled={formikProps.values.name === '' || !formikProps.isValid} type="submit" style={{ backgroundColor: "#7A82FF", border: "#7A82FF", marginBottom: '20px' }} className="btn btn-primary" >Save Changes</button>
+                    <Link className="btn btn-secondary" to="/developers" style={{ marginRight: '25px', backgroundColor: "#DC3545", border: "#DC3545", marginBottom: '20px' }} >Cancel</Link>
                 </Form>
             )}
 

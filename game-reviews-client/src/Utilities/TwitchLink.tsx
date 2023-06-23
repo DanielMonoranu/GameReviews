@@ -14,7 +14,7 @@ export default function TwitchLink(props: TwitchLinkProps) {
             username: "",
             streamLink: "",
             viewers: 0,
-            pictureUrl: "",
+
             noStream: false,
         };
 
@@ -41,7 +41,7 @@ export default function TwitchLink(props: TwitchLinkProps) {
             streamValuesFromLink.username = streamUsername;
             streamValuesFromLink.streamLink = streamLink;
             streamValuesFromLink.viewers = viewerCount;
-            streamValuesFromLink.pictureUrl = pictureUrl;
+
             setStreamValues(streamValuesFromLink);
 
         } catch (error) {
@@ -49,44 +49,35 @@ export default function TwitchLink(props: TwitchLinkProps) {
             setStreamValues(streamValuesFromLink);
         }
     }
+
     const handleLinkClick = () => {
         { window.open(streamValues?.streamLink) }
     }
+
     return (
         <>
-            {streamValues?.noStream ? <div> No Stream </div> : <div>
-
-                <h3> Twitch Link </h3>
-
+            {streamValues?.noStream ? <span  >< h4  >  The game is not streamed on Twitch </h4 > </span> : <div  >
+                <h4 >
+                    Biggest Livestream right now:
+                </h4>
+                <h4 >  <span style={{ color: "#7A82FF" }}>{streamValues?.username} </span>with {streamValues?.viewers} viewers
+                    {streamValues?.streamLink ?
+                        <button className="btn btn-info ms-2" style={{ backgroundColor: "#7A82FF", border: "#7A82FF", color: "white" }} onClick={handleLinkClick}>Go to stream</button>
+                        : null} </h4>
                 <div>
-                    Biggest Livestream Right Now: {streamValues?.username}
-                </div>
-                <div>
-                    Views: {streamValues?.viewers}
-                </div>
-                <div>
-                    <div style={{ marginTop: '10px' }}>
 
-                        {streamValues?.streamLink ?
-                            <button className="btn btn-info" onClick={handleLinkClick}>Link to Stream</button>
-                            : null}
-                        <div>
-                            <img style={{ width: '450px' }}
-                                src={streamValues?.pictureUrl}
-                                alt="selected"></img>
-                        </div>
-                    </div>
                 </div >
-            </div>
+            </div >
             }
         </>
     );
 }
+
 interface TwitchLinkInfo {
     username: string;
     streamLink: string;
     viewers: number;
-    pictureUrl: string;
+
     noStream: boolean;
 }
 interface TwitchLinkProps {

@@ -45,13 +45,13 @@ export default function EditPlatform() {
     }
 
     return (
-        <>
-            <h3>Edit Platform</h3>
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Edit Platform</h1>
             {platform ? <PlatformForm
                 model={platform}
                 onSubmit={async value => {
                     await edit(value);
                 }} /> : <Loading />}
-        </>
+        </div>
     )
 }

@@ -1,0 +1,12 @@
+.background {
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: wheat;
+
+    /* background-image: url("https://img.freepik.com/free-vector/gradient-speed-motion-background_52683-64474.jpg?t=st=1687146793~exp=1687147393~hmac=c6ec76011146a0d9e575bd63800eff587fcf269cb3715cc46b131c38630e4f6e");
+    background-repeat: no-repeat;
+    background-size: cover; */
+
+}

@@ -46,9 +46,8 @@ export default function EditGenre() {
     }
 
     return (
-        <>
-            <h3>Edit Genre</h3>
-            <h3>The id is {id}</h3>
+        <div className="container">
+            <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Edit Genre </h1>
             {genre ? <GenreForm
                 model={genre}
                 onSubmit={async value => {
@@ -56,7 +55,7 @@ export default function EditGenre() {
                 }} /> : <Loading />}
 
 
-        </>
+        </div>
 
     )
 }

@@ -26,6 +26,8 @@ export interface gameDTO {
     userScore: number;
     averageScoreCritics: number;
     averageScoreUsers: number;
+    userScoreCount: number;
+    criticScoreCount: number;
 }
 export interface landingPageDTO {
     releasedGames?: gameDTO[];

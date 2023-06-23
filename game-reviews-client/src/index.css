@@ -7,6 +7,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -20,8 +22,6 @@ form>a {
 .table a {
   margin-right: 1rem;
   /* pt tabel */
-
-
 }
 
 .table {
