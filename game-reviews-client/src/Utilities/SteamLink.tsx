@@ -28,7 +28,7 @@ export default function SteamLink(props: SteamLinkProps) {
         {steamGameInfo?.noGame ? <span  >< h4  > Game not found on Steam </h4 > </span> : < >
             <h4>  The game is available on Steam and </h4>
             <h4> costs <span style={{ color: "#7A82FF" }} > {steamGameInfo?.price}</span> <button className="btn btn-info" style={{ backgroundColor: "#7A82FF", border: "#7A82FF", color: "white" }}
-                onClick={() => window.open(`https://store.steampowered.com/app/${steamGameInfo?.gameId}`)}>Steam Link</button></h4>
+                onClick={() => window.open(`https://store.steampowered.com/app/${steamGameInfo?.gameId}`)}>Buy Game</button></h4>
         </ >}
     </>)
 }

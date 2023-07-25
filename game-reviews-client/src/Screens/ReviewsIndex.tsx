@@ -24,8 +24,9 @@ export default function ReviewsIndex() {
     const [refreshState, setRefreshState] = useState<boolean>(false);
     const [criticScore, setCriticScore] = useState<number>(0);
     const [usersScore, setUsersScore] = useState<number>(0);
-    const getUserEmail = (): string => {
+    const [gameName, setGameName] = useState<string>('');
 
+    const getUserEmail = (): string => {
         return claims.filter(claim => claim.name === 'email')[0]?.value;
     }
     const ifAdmin = () => {
@@ -41,6 +42,7 @@ export default function ReviewsIndex() {
 
     const loadGameData = async () => {
         await axios.get(`${urlGames}/${id}`).then((response) => {
+            setGameName(response.data.name);
             setUsersScore(response.data.averageScoreUsers);
             setCriticScore(response.data.averageScoreCritics);
             setUserScore(response.data.userScore);
@@ -119,19 +121,18 @@ export default function ReviewsIndex() {
         <ReviewSecondContext.Provider value={() => {
             loadDataRatings(); loadGameData(); setHasRated(false); setRefreshState(false);
         }}>
+            <h1 style={{ textAlign: 'center', marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold", color: "#7A82FF" }}  >{gameName}  </h1>
             < div className="container" style={{ display: 'flex', justifyContent: 'space-around' }} >
-
-
                 <h1 style={{ marginTop: '15px', marginBottom: '10px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Critics Reviews &nbsp;
                     <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Score: &nbsp;
                         {criticScore >= 0 ? < span  >
-                            {criticScore}  </span> : <span>Not yet rated</span>}</h1>
+                            {criticScore.toFixed(2)}  </span> : <span>Not yet rated</span>}</h1>
                 </h1>
 
                 <h1 style={{ marginTop: '15px', marginBottom: '10px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Users Reviews &nbsp;
                     <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Score: &nbsp;
                         {usersScore >= 0 ? < span  >
-                            {usersScore}  </span> : <span>Not yet rated</span>}</h1>
+                            {usersScore.toFixed(2)}  </span> : <span>Not yet rated</span>}</h1>
                 </h1>
             </div>
 

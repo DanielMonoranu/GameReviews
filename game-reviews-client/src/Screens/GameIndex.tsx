@@ -104,20 +104,20 @@ export default function GameIndex() {
                                             {game.averageScoreCritics > -1 && game.averageScoreUsers > -1 ?
 
                                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <span>Rating: {(game.averageScoreCritics + game.averageScoreUsers) / 2}</span>
+                                                    <span>Rating: {((game.averageScoreCritics + game.averageScoreUsers) / 2).toFixed(2)}</span>
                                                     {(game.averageScoreCritics + game.averageScoreUsers) / 2 > 5 ?
                                                         <img src={star} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
                                                         <img src={blackhole} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img>}</div>
                                                 :
                                                 game.averageScoreCritics > -1 ?
-                                                    <div style={{ display: 'flex', flexDirection: 'column' }}> <span>Rating: {game.averageScoreCritics}</span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}> <span>Rating: {game.averageScoreCritics.toFixed(2)}</span>
                                                         {game.averageScoreCritics > 5 ?
                                                             <img src={star} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
                                                             <img src={blackhole} style={{ width: '50px', height: '50px' }}></img>}
                                                     </div> :
                                                     game.averageScoreUsers > -1 ?
                                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                            <span>Rating: {game.averageScoreUsers}</span>
+                                                            <span>Rating: {game.averageScoreUsers.toFixed(2)}</span>
                                                             {game.averageScoreUsers > 5 ?
                                                                 <img src={star} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
                                                                 <img src={blackhole} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img>}

@@ -41,7 +41,6 @@ export default function Review(props: ReviewProps) {
         setUserScore(props.userScore);
     }, [props.userScore])
 
-    //!! pentru poze o sa mai testez sa varific daca merge
     const toolbarOptions = [
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
         ["bold", "italic", "underline", "strike"],
@@ -70,7 +69,6 @@ export default function Review(props: ReviewProps) {
             .catch(() => {
                 notify({
                     type: "error",
-                    // message: ["Network error"]
                     message: ["You need to be logged in to post a comment"]
                 });
             });
@@ -134,8 +132,6 @@ export default function Review(props: ReviewProps) {
                 borderRadius: '10px',
 
             }} key={review.id}>
-
-
                 <img src={review.user.profilePicture} alt="profile"
                     style={{ width: '30px', height: '30px', borderRadius: '50%', marginBottom: '6px' }} /> {review.user.email} &nbsp;
 

@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2023-06-24T14:48:33.4584973Z"
+    },
+    "appInsights1": {
+      "restored": true,
+      "restoreTime": "2023-06-24T14:48:36.2205322Z"
+    }
+  },
+  "parameters": {
+    "appInsights1.resourceGroupName": {
+      "Name": "appInsights1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "GameReviewsAPI"
+    },
+    "appInsights1.subscriptionId": {
+      "Name": "appInsights1.subscriptionId",
+      "Type": "subscription",
+      "Value": "a55e4003-8d43-4b11-b40b-b15887c1ce7d"
+    }
+  }
+}

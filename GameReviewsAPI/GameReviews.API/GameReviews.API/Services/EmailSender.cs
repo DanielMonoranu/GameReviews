@@ -39,7 +39,8 @@ namespace GameReviews.API.Services
 
                 foreach (var adminAccount in adminsAccounts)
                 {
-                    var htmlContent = $"<strong>User {email} is requesting Critic account.Their message:</strong> <br><br>" + text; ;
+                    var htmlContent = $"<strong>User {email} is requesting Critic account.Their message:</strong> <br><br>" + text;
+                    message.To.Clear();
                     message.To.Add(new MailAddress(adminAccount));
                     message.Body = htmlContent;
                     await client.SendMailAsync(message);

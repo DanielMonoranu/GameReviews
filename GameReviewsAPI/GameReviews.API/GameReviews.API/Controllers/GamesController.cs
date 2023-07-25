@@ -115,6 +115,8 @@ namespace GameReviews.API.Controllers
         {
             var today = DateTime.Now;
             var entries = 5;
+
+
             var upcomingGames = await _context.Games.Where(x => x.ReleaseDate > today)
                 .OrderBy(x => x.ReleaseDate).Take(entries).ToListAsync();
 

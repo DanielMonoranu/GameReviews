@@ -1,17 +1,14 @@
 import axios, { AxiosResponse } from "axios";
 import { useContext, useEffect, useState } from "react";
-import { urlGames, urlRatings } from "../endpoints";
+import ReactQuill from "react-quill";
 import { Link, useParams } from "react-router-dom";
+import AuthenticationContext from "../Auth/AuthenticationContext";
 import { gameDTO } from "../Games/games.model";
 import Loading from "../Utilities/Loading";
-import ReactQuill from "react-quill";
-import { platform } from "os";
-import TwitchLink from "../Utilities/TwitchLink";
 import SteamLink from "../Utilities/SteamLink";
-import { Rating } from "@mui/material";
 import notify from "../Utilities/ToastErrors";
-import Ratings from "../Ratings/Ratings";
-import AuthenticationContext from "../Auth/AuthenticationContext";
+import TwitchLink from "../Utilities/TwitchLink";
+import { urlGames } from "../endpoints";
 
 export default function GameFeatures() {
     const { id }: any = useParams();
@@ -111,14 +108,14 @@ export default function GameFeatures() {
                                             <span> The game is a black hole</span>
                                             <img src={blackhole} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                             <span>with a rating of </span>
-                                            <h1>{game.averageScoreUsers}</h1>
+                                            <h1>{game.averageScoreUsers.toFixed(2)}</h1>
                                             <span> from {game.userScoreCount} user{game.userScoreCount > 1 && 's'}</span></> :
                                         <>
                                             <span> from{game.userScoreCount} users</span>
                                             <span> The game is a certified star</span>
                                             <img src={star} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                             <span>with a rating of </span>
-                                            <h1>{game.averageScoreUsers}</h1>
+                                            <h1>{game.averageScoreUsers.toFixed(2)}</h1>
                                             <span> from {game.userScoreCount} user{game.userScoreCount > 1 && 's'}</span></>
                                     }
                                 </> :
@@ -128,7 +125,7 @@ export default function GameFeatures() {
                                                 <span> The game is a black hole</span>
                                                 <img src={blackhole} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                 <span>with a rating of </span>
-                                                <h1>{game.averageScoreCritics}</h1>
+                                                <h1>{game.averageScoreCritics.toFixed(2)}</h1>
                                                 <span> from {game.criticScoreCount} critic{game.criticScoreCount > 1 && 's'}</span></> :
 
                                             <>
@@ -136,7 +133,7 @@ export default function GameFeatures() {
                                                 <img src={star}
                                                     style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                 <span>with a rating of </span>
-                                                <h1>{game.averageScoreCritics}</h1>
+                                                <h1>{game.averageScoreCritics.toFixed(2)}</h1>
                                                 <span> from {game.criticScoreCount} critic{game.criticScoreCount > 1 && 's'}</span></>
                                         }
                                     </> :
@@ -146,14 +143,14 @@ export default function GameFeatures() {
                                                     <span> The game is a black hole  </span>
                                                     <img src={blackhole} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                     <span>with a rating of </span>
-                                                    <h1>{(game.averageScoreCritics + game.averageScoreUsers) / 2}</h1>
+                                                    <h1>{((game.averageScoreCritics + game.averageScoreUsers) / 2).toFixed(2)}</h1>
                                                     <span> from {game.criticScoreCount} critic{game.criticScoreCount > 1 && 's'} and {game.userScoreCount} user{game.userScoreCount > 1 && 's'}</span>
                                                 </> : <>
                                                     <span> The game is a certified star  </span>
                                                     <img src={star}
                                                         style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                     <span>with a rating of </span>
-                                                    <h1>{(game.averageScoreCritics + game.averageScoreUsers) / 2}</h1>
+                                                    <h1>{((game.averageScoreCritics + game.averageScoreUsers) / 2).toFixed(2)}</h1>
                                                     <span> from {game.criticScoreCount} critic{game.criticScoreCount > 1 && 's'} and {game.userScoreCount} user{game.userScoreCount > 1 && 's'}</span>
                                                 </>}
                                         </>}
@@ -173,7 +170,7 @@ export default function GameFeatures() {
             <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '1rem' }}>
 
                 <div  >
-                    <Link className="btn btn-primary" style={{ backgroundColor: "#7A82FF", border: "#7A82FF", marginBottom: '20px' }} to={`/reviews/${id}`}>See reviews</Link>
+                    <Link className="btn btn-primary" style={{ backgroundColor: "#7A82FF", border: "#7A82FF", marginBottom: '20px' }} to={`/reviews/${id}`}>Read reviews</Link>
                     {
                         game.developers ? <div  >
                             <h3 style={{ display: 'inline-block', }}>Developer </h3>

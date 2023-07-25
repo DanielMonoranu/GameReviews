@@ -30,13 +30,12 @@ export default function CreateGenre() {
         }
 
     }
-    return (<>
-        <h3>Create Genre</h3>
+    return (<div className="container">
+        <h1 style={{ marginTop: '15px', marginBottom: '15px', fontFamily: 'Helvetica', fontWeight: "bold" }}  >Create Genre </h1>
         <GenreForm
             model={{ name: '' }}
             onSubmit={async value => {
                 await create(value);
             }} />
-
-    </>)
+    </div>)
 }

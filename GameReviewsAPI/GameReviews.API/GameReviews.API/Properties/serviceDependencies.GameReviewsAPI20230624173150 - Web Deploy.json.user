@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2023-06-24T14:41:45.78925Z"
+    },
+    "identityapp1": {
+      "restored": true,
+      "restoreTime": "2023-06-24T14:34:41.7721137Z"
+    },
+    "storage1": {
+      "restored": true,
+      "restoreTime": "2023-06-24T14:34:51.6716248Z"
+    }
+  },
+  "parameters": {
+    "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
+      "Type": "subscription",
+      "Value": "a55e4003-8d43-4b11-b40b-b15887c1ce7d"
+    },
+    "mssql1.resourceGroupName": {
+      "Name": "mssql1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "GameReviewsAPI"
+    }
+  }
+}

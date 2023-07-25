@@ -35,6 +35,5 @@ export default function CreateDeveloper() {
             onSubmit={async value => {
                 await create(value);
             }} />
-
     </div>)
 }

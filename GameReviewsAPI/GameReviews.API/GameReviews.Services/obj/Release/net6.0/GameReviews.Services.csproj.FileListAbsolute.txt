@@ -1,0 +1,14 @@
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\bin\Release\net6.0\GameReviews.Services.deps.json
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\bin\Release\net6.0\GameReviews.Services.runtimeconfig.json
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\bin\Release\net6.0\GameReviews.Services.dll
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\bin\Release\net6.0\GameReviews.Services.pdb
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.csproj.AssemblyReference.cache
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.AssemblyInfoInputs.cache
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.AssemblyInfo.cs
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.csproj.CoreCompileInputs.cache
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.dll
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\refint\GameReviews.Services.dll
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.pdb
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\GameReviews.Services.genruntimeconfig.cache
+C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.Services\obj\Release\net6.0\ref\GameReviews.Services.dll
