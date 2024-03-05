@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nh4ugqRQ+uTXOKfZ4SCt1VUwHaQFbNBrCOapDRSaUEZPoa98t9MTqAtYBqvm0mKaxg9jUdMDMDdlPG0FEa+FYA==",
+  "dgSpecHash": "Lh0BB417UhB/7KX2dPP/fy9Puz/WOlxaQVVeFbXCp4QfYyNYDyOCTCjGoS9Rb7LPiZrz7VsyRAuIYfQB20xJjg==",
   "success": true,
-  "projectFilePath": "C:\\CALCULATOR\\Licenta\\GameReviews\\GameReviewsAPI\\GameReviews.API\\GameReviews.API\\GameReviews.API.csproj",
+  "projectFilePath": "C:\\Computer\\Programming\\GameReviews\\GameReviewsAPI\\GameReviews.API\\GameReviews.API\\GameReviews.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mgfma\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\mgfma\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
