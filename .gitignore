@@ -1,4 +1,3 @@
 /GameReviewsAPI/GameReviews.API/GameReviews.API/appsettings.json
-/GameReviewsAPI/GameReviews.API/.vs
-/GameReviewsAPI/GameReviews.API/GameReviews.API/bin
-/GameReviewsAPI/GameReviews.API/GameReviews.API/bin/Release/net7.0/es/Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+/GameReviewsAPI/GameReviews.API/.vs/*
+/GameReviewsAPI/GameReviews.API/GameReviews.API/bin/*
