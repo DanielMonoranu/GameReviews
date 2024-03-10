@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\GameReviews.API.props" />
-</Project>

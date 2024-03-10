@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<sitemanifest>
-  <IisApp path="C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.API\obj\Release\net7.0\win-x86\PubTmp\Out\" />
-  <dbfullsql path="C:\CALCULATOR\Licenta\GameReviews\GameReviewsAPI\GameReviews.API\GameReviews.API\obj\Release\net7.0\win-x86\PubTmp\EFSQLScripts\GameReviews.API.ApplicationDbContext.sql" />
-</sitemanifest>
