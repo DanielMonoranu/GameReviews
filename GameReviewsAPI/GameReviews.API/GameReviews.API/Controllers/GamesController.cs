@@ -1,17 +1,14 @@
 ﻿using AutoMapper;
-using GameReviews.API.Helpers;
 using GameReviews.API.DTOs;
+using GameReviews.API.DTOs.IntermediateDTOs;
 using GameReviews.API.Entities;
+using GameReviews.API.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using GameReviews.API.DTOs.IntermediateDTOs;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Net.Http;
 using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Identity.Client;
 
 namespace GameReviews.API.Controllers
 
@@ -61,7 +58,6 @@ namespace GameReviews.API.Controllers
                     averageScoreCritics = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "Critic")
                         .AverageAsync(x => x.Score);
                     criticScoreCount = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "Critic").CountAsync();
-
                 }
                 catch { }
                 try
@@ -69,7 +65,6 @@ namespace GameReviews.API.Controllers
                     averageScoreUsers = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "User")
                     .AverageAsync(x => x.Score);
                     userScoreCount = await _context.Ratings.Where(x => x.GameId == id && x.User.Type == "User").CountAsync();
-
                 }
                 catch { }
             }
@@ -115,7 +110,6 @@ namespace GameReviews.API.Controllers
         {
             var today = DateTime.Now;
             var entries = 5;
-
 
             var upcomingGames = await _context.Games.Where(x => x.ReleaseDate > today)
                 .OrderBy(x => x.ReleaseDate).Take(entries).ToListAsync();
@@ -177,7 +171,7 @@ namespace GameReviews.API.Controllers
 
             if (gameCreationDTO.Poster != null)
             {
-                game.Poster = await _fileStorageService.EditFile(container, gameCreationDTO.Poster, game.Poster);
+                //  game.Poster = await _fileStorageService.EditFile(container, gameCreationDTO.Poster, game.Poster);
 
             }
             await _context.SaveChangesAsync();
@@ -190,9 +184,15 @@ namespace GameReviews.API.Controllers
         public async Task<ActionResult<int>> Post([FromForm] GameCreationDTO gameCreationDTO)
         {
             var game = _mapper.Map<Game>(gameCreationDTO);
-            if (gameCreationDTO.Poster != null)
+            if (gameCreationDTO.Poster is not null)
             {
-                game.Poster = await _fileStorageService.SaveFile(container, gameCreationDTO.Poster);
+                byte[] posterPictureBytes;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await gameCreationDTO.Poster.CopyToAsync(memoryStream);
+                    posterPictureBytes = memoryStream.ToArray();
+                }
+                game.Poster = posterPictureBytes;
             }
             try
             {
@@ -200,10 +200,10 @@ namespace GameReviews.API.Controllers
                 await _context.SaveChangesAsync();
                 return Ok(game.Id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var response = new List<string>();
-                response.Add("The poster field is required");
+                response.Add("There was a problem creating the game");
                 return BadRequest(response);
             }
         }
@@ -218,7 +218,7 @@ namespace GameReviews.API.Controllers
             }
             _context.Remove(game);
             await _context.SaveChangesAsync();
-            await _fileStorageService.DeleteFile(game.Poster, container);
+            // await _fileStorageService.DeleteFile(game.Poster, container);
             return Ok();
         }
 

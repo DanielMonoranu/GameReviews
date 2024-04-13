@@ -29,7 +29,7 @@ namespace GameReviews.API.Controllers
         private readonly IEmailSender _emailSender;
         private string container = "userspictures";
         private string userType = "User";
-        private string pictureString = "https://gamereviewsapi.blob.core.windows.net/userspictures/d06e8f56-16ec-47b2-978a-03dcda797947.png";
+        private string pictureString = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAUVBMVEWenp5CQkIAAACIiIhFRUWlpaU5OTmioqIZGRlmZmY8PDwrKytHR0c0NDSTk5NjY2ONjY0VFRVYWFgJCQknJyeampqrq6tra2t0dHQQEBAcHBxoIqDbAAADmklEQVR4nO3c0XaiMBRA0RIVFKWCtdr2/z90CKgEcHUKBO+NnvNqUfeiCsGQtzciIiIiIiIiIiIiIiIiIiIiIiLvJd2k35Dv3hfd3qXfkt+Svem2f669mGx6ws3TCde7ZdNu/YzCZdS0RBhA7UPD6twTnldhHz3e9xu3c9QTRufWX+wDO3oki953Z1fYbRHWXrTCdbtjS3jsPBqk0D062CK3zmO7kISrqtyYNun3lsbk9YbSb///rW4frIHCS/qJLyHM4qoBwCiqN8m0C+2B+2RMPGTvtfZkbMxJ89E/WZSH+XMpHAks96Qx5XnAXu3X6nUQOEmoeuhYnl5/lAfvIh0tTIty+w+9J+XXQeBoYHUioHno2B0ijUQilOnuIHC08DJ0lEa55VlqO3oSHqtny3JpVlMzGiw8CAuFI0Yr3FZlk4FRlNVPpU64648Bx6ZwxGiFfnAOE+FDQ4gQoXwIESKUDyFChPIhRIhQPoQIEcqHECFC+RAiRCgfQoQI5UOIEKF8zr0HPmxKZ5s8/5yoO7f+jBSuFQrfPqs7e/ODJ+Ehr57vU5rldpt96WWOsMLZl7bkaxOZbzvnbsI8b7v5t4k2X+p4ZUl2/fxMnqtvTKZSeIjtvNdoojCyTxIfNAov98WeJgpP6u+ZXU0U6r7vyfYSwnTECVy9SRqIsKju7B10Are8bBOI8MnvsEzqG/EPg4WH+rZ8zd+il+pv+7wcTw0QlmOlXP1hopUdbaRxtxuo90iqayTxh+6sqeB8Mpf3HkSorWTVLW8J897jgQH7uetI6LoG46vWWiBPKwz4U/eXWmvyhLbezt8Kes0kIiIiIgqm/qB3YtpOXptf13ylbYSVpC8gPPauEo5P4fXFUrj1OG2ouUasZjzpWXi7zl9dEhDbna3FkL0LnaR+zvh018nPM7/ColmCV2wVvt6FbZ9CZx1euVX45hU6VlFheznkWYAPFra+WwYuhzxB6C7gPjOwnhZ0KXuY8Hh7zbknEyVx56P3EGHhvmI8szA1P1u3Rwivq/DZfkw6u3D7gO+Wbs3rbU0676jK86nZcOrWZPmsp3AKhGa+OTd2DH+KNAhP8/yjXs9gRIXRnD+S6xBWyhmFdhLQ+FncIQiHTOSarzmF4v+gVQgRIpQPIUKE8iFEiFA+hAgRyocQIUL5ECJEKB9ChAjlQ4gQoXwIESKUDyFChPIhRIhQPoQIEcqHECFC+RAiRCgfwlcT/gMG3XFmb+Mg0wAAAABJRU5ErkJggg==";
 
         public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender,
             IConfiguration configuration, IFileStorageService fileStorageService, ApplicationDbContext context, IMapper mapper, IReviewsService reviewsService)
@@ -44,26 +44,34 @@ namespace GameReviews.API.Controllers
             _emailSender = emailSender;
         }
         [HttpPost("create")]
-        public async Task<ActionResult<AuthenticationResponseDTO>> Create([FromForm] UserCreationDTO userCreation)
+        public async Task<ActionResult<AuthenticationResponseDTO>> Create([FromForm] UserCreationDTO newUser)
         {
-            var user = new ApplicationUser { UserName = userCreation.Email, Email = userCreation.Email };
+            var user = new ApplicationUser { UserName = newUser.Email, Email = newUser.Email };
             user.Type = userType;
-            var result = await _userManager.CreateAsync(user, userCreation.Password);
-            var userCredentials = new UserCredentialsDTO() { Email = userCreation.Email, Password = userCreation.Password };
+            var result = await _userManager.CreateAsync(user, newUser.Password);
+            var userCredentials = new UserCredentialsDTO() { Email = newUser.Email, Password = newUser.Password };
+
             if (result.Succeeded)
             {
-                if (userCreation.ProfilePicture != null)
+                if (newUser.ProfilePicture is not null)
                 {
-                    user.ProfilePicture = await _fileStorageService.SaveFile(container, userCreation.ProfilePicture);
+                    byte[] profilePictureBytes;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await newUser.ProfilePicture.CopyToAsync(memoryStream);
+                        profilePictureBytes = memoryStream.ToArray();
+                    }
+                    user.ProfilePicture = profilePictureBytes;
                 }
-                else
-                {
-                    user.ProfilePicture = pictureString;
-                }
+                //else
+                //{
+                //    //   user.ProfilePicture = pictureString;
+                //}
                 await _userManager.UpdateAsync(user);
 
                 var claimToSend = new Claim("type", "User");
-                return BuildToken(user.Email, user.ProfilePicture, claimToSend);
+                //  return BuildToken(user.Email, user.ProfilePicture, claimToSend);
+                return BuildToken(user.Email, null, claimToSend);
             }
             else
             {
@@ -96,7 +104,8 @@ namespace GameReviews.API.Controllers
                     var type = user.Type;
                     claimToSend = new Claim("type", type);
                 }
-                return BuildToken(user.Email, user.ProfilePicture, claimToSend);
+                //  return BuildToken(user.Email, user.ProfilePicture, claimToSend);
+                return BuildToken(user.Email, null, claimToSend);
             }
             else
             {
@@ -138,11 +147,11 @@ namespace GameReviews.API.Controllers
                 {
                     try
                     {
-                        if (user.ProfilePicture != pictureString)
-                        {
-                            await _fileStorageService.DeleteFile(user.ProfilePicture, container);
-                        }
-                        user.ProfilePicture = await _fileStorageService.SaveFile(container, userCredentials.NewProfilePicture);
+                        //  if (user.ProfilePicture != pictureString)
+                        // {
+                        //     await _fileStorageService.DeleteFile(user.ProfilePicture, container);
+                        //  }
+                        //    user.ProfilePicture = await _fileStorageService.SaveFile(container, userCredentials.NewProfilePicture);
                         var resultPicture = await _userManager.UpdateAsync(user);
                     }
                     catch (Exception e)
@@ -167,7 +176,8 @@ namespace GameReviews.API.Controllers
                     var type = user.Type;
                     claimToSend = new Claim("type", type);
                 }
-                return BuildToken(user.Email, user.ProfilePicture, claimToSend);
+                //  return BuildToken(user.Email, user.ProfilePicture, claimToSend);
+                return BuildToken(user.Email, null, claimToSend);
             }
             else
             {
@@ -186,8 +196,26 @@ namespace GameReviews.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getProfilePicture")]
+        public async Task<ActionResult<byte[]>> Get([FromQuery] string email)
+        {
+            if (email is not null)
+            {
+                var user = _userManager.Users.SingleOrDefault(x => x.Email == email);
+                var profilePicture = user.ProfilePicture;
+                if (profilePicture is not null)
+                    return Ok(profilePicture);
+                else
+                {
+                    return Ok();
+                }
+            }
+            return BadRequest("Incorrect email");
+        }
+
+
         [HttpPost("makeAdmin")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
+        //  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "isAdmin")]
         public async Task<ActionResult> MakeAdmin([FromBody] string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -249,15 +277,15 @@ namespace GameReviews.API.Controllers
             }
             if (user is null) return NotFound();
             await _userManager.DeleteAsync(user);
-            if (user.ProfilePicture != null && user.ProfilePicture != pictureString)
-            {
+            //  if (user.ProfilePicture != null && user.ProfilePicture != pictureString)
+            //  {
 
-                await _fileStorageService.DeleteFile(user.ProfilePicture, container);
-            }
+            //     await _fileStorageService.DeleteFile(user.ProfilePicture, container);
+            // }
             return Ok();
         }
 
-        [HttpDelete( )]
+        [HttpDelete()]
         public async Task<ActionResult> DeleteAccount([FromBody] UserCredentialsDTO userCredentials)
         {
             var result = await _signInManager.PasswordSignInAsync(userCredentials.Email,
@@ -266,7 +294,7 @@ namespace GameReviews.API.Controllers
             {
                 var user = await _userManager.FindByEmailAsync(userCredentials.Email);
                 await Delete(user.Id);
-            return Ok();
+                return Ok();
             }
             else
             {

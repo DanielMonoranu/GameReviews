@@ -19,7 +19,6 @@ export default function UserReview(props: UserReviewProps) {
     const [recordsPerPage, setRecordsPerPage] = useState(5);
     const [userReviews, setUserReviews] = useState<ReviewDTO[]>()
 
-
     const refreshAgain = useContext(ReviewSecondContext)
 
     useEffect(() => {
@@ -40,7 +39,6 @@ export default function UserReview(props: UserReviewProps) {
         });
     }
 
-
     return (<RefreshContext.Provider value={() => {
         loadReviews();
         refreshAgain();
@@ -56,8 +54,6 @@ export default function UserReview(props: UserReviewProps) {
 
             <Pagination currentPage={currentPage} totalPages={totalAmountOfPages}
                 onPageChange={newCurrentPage => setCurrentPage(newCurrentPage)} />
-
-
         </div>
         <>
         </>

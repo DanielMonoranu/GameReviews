@@ -22,7 +22,10 @@ export default function SingleGame(props: gameDTO) {
     return (
         <div className={css.div}>
             <Link to={buildLink()}>
-                <img style={{ borderRadius: '10px' }} alt="Poster" src={props.poster} />
+                <img style={{ borderRadius: '10px' }} alt="Poster"
+                 src={`data:image/jpeg;base64,${props.poster}`}
+                //  src={props.poster}
+                  />
             </Link>
             <p>
                 <Link to={buildLink()}>

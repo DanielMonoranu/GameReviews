@@ -15,7 +15,7 @@ export interface gameCreationDTO {
 export interface gameDTO {
     id: number;
     name: string;
-    poster: string;
+    poster:string;
     trailer: string;
     releaseDate: Date;
     multiplayer: boolean;

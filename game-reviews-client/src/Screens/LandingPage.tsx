@@ -21,30 +21,18 @@ export default function LandingPage() {
                 type: "error",
                 message: ["Network Error"]
             });
-
         });
-
-
     }
 
     return (<RefreshContext.Provider value={() => loadData()}>
-
-
-        <div style={{
-            backgroundImage: "url(https://gamereviewsapi.blob.core.windows.net/gameresources/bggg.jpg)",
-            backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '320px', display: 'flex', alignItems: 'center'
-        }}>
-
-
+        <div >
             <div style={{ margin: 'auto', textAlign: 'center' }}>
 
                 <h1 className="display-1 text-center"
-                    style={{ color: 'wheat', fontFamily: 'Helvetica', fontWeight: "bold", cursor: "default" }}>
-                    <img src="https://gamereviewsapi.blob.core.windows.net/gameresources/SRBej.png" style={{ width: '100px', height: '100px' }}></img>&nbsp;STARRY REVIEWS  </h1>
-
+                    style={{ color: '#7b82ff', fontFamily: 'Helvetica', fontWeight: "bold", cursor: "default", margin: 60 }}>
+                    STARRY REVIEWS
+                </h1>
             </div>
-
-
         </div>
 
         <div className="container">

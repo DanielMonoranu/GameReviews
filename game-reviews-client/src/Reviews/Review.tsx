@@ -130,9 +130,9 @@ export default function Review(props: ReviewProps) {
                 padding: '10px',
                 width: props.maxWidth,
                 borderRadius: '10px',
-
+             //   <img src={`data:image/jpeg;base64,${game.poster}`} 
             }} key={review.id}>
-                <img src={review.user.profilePicture} alt="profile"
+                <img src={`data:image/jpeg;base64,${review.user.profilePicture}`} alt="profile"
                     style={{ width: '30px', height: '30px', borderRadius: '50%', marginBottom: '6px' }} /> {review.user.email} &nbsp;
 
                 {props.ratings && <>

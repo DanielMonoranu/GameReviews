@@ -54,9 +54,6 @@ const routes = [
     { path: "/becomeCritic", component: BecomeCritic, isUser: true },
     { path: "/changeCredentials", component: ChangeCredentialsIndex, isAuthenticated: true },
 
-
-
-
     { path: "*", component: RedirectToLandingPage },
 ]
 export default routes;

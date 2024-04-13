@@ -22,8 +22,6 @@ export default function GameIndex() {
     const [recordsPerPage, setRecordsPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
     const [claims, setClaims] = useState<claim[]>([]);
-    const star = 'https://gamereviewsapi.blob.core.windows.net/gameresources/stea.png'
-    const blackhole = 'https://gamereviewsapi.blob.core.windows.net/gameresources/gaura.png'
 
     const isAdmin = () => {
         return claims.findIndex(claim => claim.name === 'role' &&
@@ -89,7 +87,7 @@ export default function GameIndex() {
                                 <tr key={game.id}>
                                     <td>
                                         <Link to={`games/${game.id}`} >
-                                            <img src={game.poster} alt="poster" style={{ width: "120px", borderRadius: '10px' }} />
+                                            <img src={`data:image/jpeg;base64,${game.poster}`} alt="poster" style={{ width: "120px", borderRadius: '10px' }} />
                                         </Link>
                                     </td>
                                     <td>
@@ -106,21 +104,21 @@ export default function GameIndex() {
                                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                     <span>Rating: {((game.averageScoreCritics + game.averageScoreUsers) / 2).toFixed(2)}</span>
                                                     {(game.averageScoreCritics + game.averageScoreUsers) / 2 > 5 ?
-                                                        <img src={star} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
-                                                        <img src={blackhole} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img>}</div>
+                                                        <img src={process.env.PUBLIC_URL + '/star.png'} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
+                                                        <img src={process.env.PUBLIC_URL + '/blackhole.png'} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img>}</div>
                                                 :
                                                 game.averageScoreCritics > -1 ?
                                                     <div style={{ display: 'flex', flexDirection: 'column' }}> <span>Rating: {game.averageScoreCritics.toFixed(2)}</span>
                                                         {game.averageScoreCritics > 5 ?
-                                                            <img src={star} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
-                                                            <img src={blackhole} style={{ width: '50px', height: '50px' }}></img>}
+                                                            <img src={process.env.PUBLIC_URL + '/star.png'} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
+                                                            <img src={process.env.PUBLIC_URL + '/blackhole.png'} style={{ width: '50px', height: '50px' }}></img>}
                                                     </div> :
                                                     game.averageScoreUsers > -1 ?
                                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                             <span>Rating: {game.averageScoreUsers.toFixed(2)}</span>
                                                             {game.averageScoreUsers > 5 ?
-                                                                <img src={star} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
-                                                                <img src={blackhole} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img>}
+                                                                <img src={process.env.PUBLIC_URL + '/star.png'}style={{ width: '50px', height: '50px', marginTop: '10px' }}></img> :
+                                                                <img src={process.env.PUBLIC_URL + '/blackhole.png'} style={{ width: '50px', height: '50px', marginTop: '10px' }}></img>}
                                                         </div> :
                                                         <span>Not yet rated</span>}
                                         </h4>

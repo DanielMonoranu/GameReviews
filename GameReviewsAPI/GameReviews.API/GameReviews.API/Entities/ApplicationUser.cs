@@ -4,7 +4,7 @@ namespace GameReviews.API.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public string ProfilePicture { get; set; }
+        public byte[]? ProfilePicture { get; set; }
         public string Type { get; set; }
 
     }

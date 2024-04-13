@@ -33,8 +33,6 @@ export default function ImageField(props: imageFieldProps) {
     return (
 
         <div className="mb-3">
-
-
             <label>{props.displayName}</label>
             <div>
                 <input type='file' accept=".jpg,.jpeg,.png"
@@ -43,13 +41,19 @@ export default function ImageField(props: imageFieldProps) {
             {imageBase64 ?
                 <div>
                     <div style={{ marginTop: '10px' }}>
-                        <img style={{ width: '450px' }} src={imageBase64} alt="selected"></img>
+                        <img style={{ width: '450px' }}
+                         src={imageBase64} 
+                       //  src={`data:image/jpeg;base64,${imageBase64}`}
+                         alt="selected"></img>
                     </div>
                 </div> : null}
             {imageURL ?
                 <div>
                     <div style={{ marginTop: '10px' }}>
-                        <img style={{ width: '450px' }} src={imageURL} alt="selected"></img>
+                        <img style={{ width: '450px' }} 
+                         //src={`data:image/jpeg;base64,${imageBase64}`}
+                         src={imageURL} 
+                         alt="selected"></img>
                     </div>
                 </div> : null}
         </div>

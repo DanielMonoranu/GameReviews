@@ -16,9 +16,6 @@ export default function GameFeatures() {
     const { claims } = useContext(AuthenticationContext);
     const userIsLogged = claims?.length > 0;
 
-    const star = 'https://gamereviewsapi.blob.core.windows.net/gameresources/stea.png'
-    const blackhole = 'https://gamereviewsapi.blob.core.windows.net/gameresources/gaura.png'
-
     useEffect(() => {
         axios.get(`${urlGames}/${id}`)
             .then((response: AxiosResponse<gameDTO>) => {
@@ -66,10 +63,11 @@ export default function GameFeatures() {
 
             {userIsLogged && game.userScore > 0 ? <> | Your score: {game.userScore}</> : null}
 
-
             <div style={{ display: 'flex', marginTop: '1rem' }}>
                 <span style={{ display: 'inline-block', marginRight: '30px', }}>
-                    <img src={game.poster} style={{ width: '225px', height: '315px', borderRadius: '10px' }} alt="poster" />
+
+                    <img />
+                    <img src={`data:image/jpeg;base64,${game.poster}`} style={{ width: '225px', height: '315px', borderRadius: '10px' }} alt="poster" />
                 </span>
                 {game.trailer ? <div>
                     <iframe title="youtube-trailer"
@@ -106,14 +104,14 @@ export default function GameFeatures() {
                                     {game.averageScoreUsers <= 5 ?
                                         <>
                                             <span> The game is a black hole</span>
-                                            <img src={blackhole} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
+                                            <img src={process.env.PUBLIC_URL + '/blackhole.png'} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                             <span>with a rating of </span>
                                             <h1>{game.averageScoreUsers.toFixed(2)}</h1>
                                             <span> from {game.userScoreCount} user{game.userScoreCount > 1 && 's'}</span></> :
                                         <>
                                             <span> from{game.userScoreCount} users</span>
                                             <span> The game is a certified star</span>
-                                            <img src={star} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
+                                            <img src={process.env.PUBLIC_URL + '/star.png'} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                             <span>with a rating of </span>
                                             <h1>{game.averageScoreUsers.toFixed(2)}</h1>
                                             <span> from {game.userScoreCount} user{game.userScoreCount > 1 && 's'}</span></>
@@ -123,14 +121,14 @@ export default function GameFeatures() {
                                         {game.averageScoreCritics <= 5 ?
                                             <>
                                                 <span> The game is a black hole</span>
-                                                <img src={blackhole} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
+                                                <img src={process.env.PUBLIC_URL + '/blackhole.png'} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                 <span>with a rating of </span>
                                                 <h1>{game.averageScoreCritics.toFixed(2)}</h1>
                                                 <span> from {game.criticScoreCount} critic{game.criticScoreCount > 1 && 's'}</span></> :
 
                                             <>
                                                 <span> The game is a certified star</span>
-                                                <img src={star}
+                                                <img src={process.env.PUBLIC_URL + '/star.png'}
                                                     style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                 <span>with a rating of </span>
                                                 <h1>{game.averageScoreCritics.toFixed(2)}</h1>
@@ -141,13 +139,13 @@ export default function GameFeatures() {
                                             {(game.averageScoreCritics + game.averageScoreUsers) / 2 <= 5 ?
                                                 <>
                                                     <span> The game is a black hole  </span>
-                                                    <img src={blackhole} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
+                                                    <img src={process.env.PUBLIC_URL + '/blackhole.png'} style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                     <span>with a rating of </span>
                                                     <h1>{((game.averageScoreCritics + game.averageScoreUsers) / 2).toFixed(2)}</h1>
                                                     <span> from {game.criticScoreCount} critic{game.criticScoreCount > 1 && 's'} and {game.userScoreCount} user{game.userScoreCount > 1 && 's'}</span>
                                                 </> : <>
                                                     <span> The game is a certified star  </span>
-                                                    <img src={star}
+                                                    <img src={process.env.PUBLIC_URL + '/star.png'}
                                                         style={{ width: '100px', height: '100px', marginBottom: '15px', marginTop: '15px' }}></img>
                                                     <span>with a rating of </span>
                                                     <h1>{((game.averageScoreCritics + game.averageScoreUsers) / 2).toFixed(2)}</h1>

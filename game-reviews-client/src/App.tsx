@@ -48,11 +48,9 @@ function App() {
 
       <AuthenticationContext.Provider value={{ claims, update: setClaims }}>
 
-
         <div className={css.background}>
           <ToastContainer />
           <Menu />
-
           {/* <div style={{ color: ' white ' }}  > */}
           <div>
 
@@ -81,8 +79,7 @@ function App() {
             </Switch>
           </div>
 
-
-          <footer style={{ marginTop: 'auto', borderTop: '3px' }} className='bd-footer navbar-expand-lg py-2 bg-dark'  >
+          <footer style={{ marginTop: 'auto', borderTop: '20px' }} className='bd-footer navbar-expand-lg py-2 bg-dark'  >
             <div className='container-fluid text-white'>Starry Reviews {new Date().getFullYear().toString()}</div>
           </footer>
         </div>

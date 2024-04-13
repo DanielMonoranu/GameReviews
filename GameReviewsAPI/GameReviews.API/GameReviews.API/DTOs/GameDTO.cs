@@ -8,7 +8,7 @@
         public string Trailer { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Description { get; set; }
-        public string Poster { get; set; }
+        public byte[]? Poster { get; set; }
         public List<GenreDTO> Genres { get; set; }
         public List<DeveloperDTO> Developers { get; set; }
         public List<PlatformDTO> Platforms { get; set; }

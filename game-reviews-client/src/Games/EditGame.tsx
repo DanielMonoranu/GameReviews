@@ -25,7 +25,7 @@ export default function EditGame() {
                     name: response.data.game.name,
                     multiplayer: response.data.game.multiplayer,
                     trailer: response.data.game.trailer,
-                    posterURL: response.data.game.poster,
+                  //  posterURL: response.data.game.poster,
                     description: response.data.game.description,
                     releaseDate: new Date(response.data.game.releaseDate),
                 };

@@ -23,7 +23,7 @@ export default function UsersIndex() {
     const loadData = async () => {
         await axios.get(urlAccounts, { params: { Page: currentPage, RecordsPerPage: recordsPerPage } })
             .then((response: AxiosResponse<userDTO[]>) => {
-                console.log(response.data)
+              //  console.log(response.data)
                 const totalAmountOfRecords = parseInt(response.headers['totalamountofrecords'], 10);
                 setTotalAmountOfPages(Math.ceil(totalAmountOfRecords / recordsPerPage));
                 setUsers(response.data);
