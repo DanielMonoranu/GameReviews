@@ -41,7 +41,6 @@ export default function TwitchLink(props: TwitchLinkProps) {
             streamValuesFromLink.username = streamUsername;
             streamValuesFromLink.streamLink = streamLink;
             streamValuesFromLink.viewers = viewerCount;
-
             setStreamValues(streamValuesFromLink);
 
         } catch (error) {

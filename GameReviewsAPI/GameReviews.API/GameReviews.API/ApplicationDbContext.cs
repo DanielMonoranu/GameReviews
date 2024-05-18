@@ -34,7 +34,6 @@ namespace GameReviews.API
                             .WithMany(g => g.Reviews)
                             .HasForeignKey(r => r.GameId);
 
-
             base.OnModelCreating(modelBuilder);
         }
 

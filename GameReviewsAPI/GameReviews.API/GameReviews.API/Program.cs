@@ -55,7 +55,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["jwtkey"])),
             ClockSkew = TimeSpan.Zero
         };
-
     });
 
 builder.Services.AddSwaggerGen(c =>
@@ -82,12 +81,13 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
-
 });
 
-builder.Services.AddCors(options =>   //pt a putea face call-uri in frontend
+builder.Services.AddCors(options => 
 {
+   // var frontendURL = "https://gamereviewsreactapp.web.app";
     var frontendURL = builder.Configuration.GetValue<string>("frontend_url");
+
     options.AddDefaultPolicy(builder =>
     {
         builder.WithOrigins(frontendURL).AllowAnyMethod().AllowAnyHeader()
@@ -99,6 +99,8 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("isAdmin", policy => policy.RequireClaim("role", "admin"));
 });
+
+//builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
 
 builder.Services.AddResponseCaching(); //pt sistem de cache
 var app = builder.Build();

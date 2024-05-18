@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationInsightsResourceId>/subscriptions/a55e4003-8d43-4b11-b40b-b15887c1ce7d/resourceGroups/GameReviewsAPI/providers/microsoft.insights/components/GameReviewsAPI</ApplicationInsightsResourceId>
+    <ApplicationInsightsResourceId>/subscriptions/4d0db599-a1bd-4574-a239-f1091af17760/resourceGroups/GameReviewsResourceGroup/providers/microsoft.insights/components/GameReviewsApplcationInsights</ApplicationInsightsResourceId>
     <UserSecretsId>1406be25-c3ac-4f78-88f8-14d1f276887f</UserSecretsId>
   </PropertyGroup>
 

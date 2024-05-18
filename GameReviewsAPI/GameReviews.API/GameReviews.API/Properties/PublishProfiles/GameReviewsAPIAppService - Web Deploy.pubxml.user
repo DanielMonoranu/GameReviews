@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAr5DxKbALQE2/RAj3f3tvvgAAAAACAAAAAAAQZgAAAAEAACAAAABiNRyy25gH4qw7h2DNUfh0RRn2uh1E8KTKFt1uS/iv2QAAAAAOgAAAAAIAACAAAADclz7ILkX/OpGZfXZVAaqNjIxF/JYExNBxVPawRaCJuYAAAAB7MTdrr5FzmO4VH+5UEh8EuGjypvxOUuRbXN276GPBTmS9qCyiF0mRRSnFZmkO/ha27c414AcB0z/acB24gkwU/8yE6iLmG48HVPEfBi5BVErsCzakohrBie8mr7rxyKLjLNjXfLZronzceNxzH19wyMHrlBSfyWumsbiuB42MRUAAAAB6Qiu+wJaeaX3ta9yiDoY8cpp+j+4PExndRw7b8hN9+2DHytKCjQC8CiWOeqIuQVLJCsjOLk/qFleS0Uuv4MIs</EncryptedPassword>
+    <History>True|2024-04-13T18:21:00.4924274Z;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <EFMigrations Include="GameReviews.API.ApplicationDbContext">
+      <Value>Data Source=gamereviewsapidbserver4.database.windows.net,1433%3bInitial Catalog=GameReviewsAPI_db%3bUser ID=DaniAdministratorul%3bPassword=ParolaDeSef!0%40</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

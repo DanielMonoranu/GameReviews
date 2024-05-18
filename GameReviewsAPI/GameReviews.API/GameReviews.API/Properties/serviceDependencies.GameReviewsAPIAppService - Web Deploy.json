@@ -1,0 +1,34 @@
+{
+  "dependencies": {
+    "appInsights1": {
+      "ignored": "true",
+      "type": "appInsights",
+      "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+      "dynamicId": null
+    },
+    "apis1": {
+      "ignored": "true",
+      "type": "apis.azure"
+    },
+    "identityapp1": {
+      "ignored": "true",
+      "type": "identityapp"
+    },
+    "storage1": {
+      "ignored": "true",
+      "type": "storage"
+    },
+    "secrets1": {
+      "ignored": "true",
+      "type": "secrets"
+    },
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/GameReviewsAPIAppService/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsDefaultConnection_CCD0EBBD1B",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/gamereviewsapidbserver4/databases/GameReviewsAPI_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DefaultConnection",
+      "dynamicId": null
+    }
+  }
+}
